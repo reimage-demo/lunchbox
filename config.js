@@ -1,6 +1,7 @@
 window.LUNCHBOX_CONFIG = {
   // Dedicated Lunch Box production deployment. This is separate from Patio.
   convexUrl: "https://uncommon-bullfrog-641.convex.cloud",
+  publicSiteUrl: "https://reimage-demo.github.io/lunchbox/",
   paymentProvider: "square",
   paymentEnabled: false,
   defaultLocation: {

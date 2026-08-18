@@ -1,6 +1,6 @@
 (function () {
   const { fallbackMenu } = window.LunchBoxData;
-  const { escapeHtml, money } = window.LunchBoxUtils;
+  const { escapeHtml, money, resolveAssetUrl } = window.LunchBoxUtils;
   const grid = document.querySelector("#cateringGrid");
   const convexClient =
     window.LUNCHBOX_CONFIG?.convexUrl && window.LunchBoxConvex
@@ -34,7 +34,7 @@
           .join("");
         return `<article class="catering-card">
           <div class="catering-card-media">
-            ${item.imageUrl ? `<img src="${escapeHtml(item.imageUrl)}" width="800" height="600" loading="lazy" decoding="async" alt="${escapeHtml(item.name)}">` : '<div class="menu-photo-placeholder"><span>Photo coming soon</span></div>'}
+            ${item.imageUrl ? `<img src="${escapeHtml(resolveAssetUrl(item.imageUrl))}" width="800" height="600" loading="lazy" decoding="async" alt="${escapeHtml(item.name)}">` : '<div class="menu-photo-placeholder"><span>Photo coming soon</span></div>'}
           </div>
           <div class="catering-card-copy">
             <div><p class="eyebrow dark">Catering</p><span>${price}</span></div>

@@ -154,5 +154,13 @@
     return dateFormatter.format(new Date(`${value}T12:00:00Z`));
   }
 
-  window.LunchBoxUtils = { money, escapeHtml, displayDate };
+  function resolveAssetUrl(value = "") {
+    if (!value || /^(?:https?:|blob:|data:)/i.test(value)) return value;
+    const base =
+      window.LUNCHBOX_CONFIG?.publicSiteUrl || document.baseURI;
+    return new URL(String(value).replace(/^\.\//, "").replace(/^\//, ""), base)
+      .href;
+  }
+
+  window.LunchBoxUtils = { money, escapeHtml, displayDate, resolveAssetUrl };
 })();
