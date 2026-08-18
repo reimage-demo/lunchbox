@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta
+      name="description"
+      content="Check the live status of your Lunch Box pickup order."
+    />
+    <meta name="robots" content="noindex,follow,noarchive" />
+    <title>Order Status | Lunch Box</title>
+    <link rel="icon" href="assets/logo-transparent.webp" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Sora:wght@500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css?v=lunchbox-16" />
+  </head>
+  <body data-page="status">
+    <header class="site-header">
+      <a class="brand" href="index.html"
+        ><img
+          src="assets/logo-transparent.webp"
+          width="1000"
+          height="732"
+          alt="Lunch Box" /></a
+      ><button
+        class="menu-toggle"
+        data-menu-toggle
+        aria-label="Open navigation"
+        aria-expanded="false"
+      >
+        <span></span><span></span><span></span>
+      </button>
+      <nav class="main-nav" data-nav>
+        <a data-page="home" href="index.html">Home</a
+        ><a data-page="menu" href="menu.html">Menu</a
+        ><a data-page="catering" href="catering.html">Catering</a
+        ><a data-page="status" href="order-status.html">Order Status</a
+        ><a data-page="contact" href="contact.html">Contact Us</a
+        ><a class="nav-cta" href="menu.html">Start Order</a>
+      </nav>
+    </header>
+    <div id="fulfillmentMount"></div>
+    <main>
+      <section class="status-page">
+        <div class="status-page-heading">
+          <div>
+            <p class="eyebrow dark">Pickup board</p>
+            <h2>What’s happening now</h2>
+          </div>
+          <a href="menu.html">Place another order</a>
+        </div>
+        <div class="status-board-modern" id="orderBoard">
+          <div class="loading-card">Connecting to the kitchen…</div>
+        </div>
+        <p class="status-privacy">
+          Only first names and order numbers are shown. Keep your order number
+          handy when you arrive for pickup.
+        </p>
+        <p class="status-privacy">DoorDash and Uber Eats delivery orders are tracked in the delivery partner’s app or website.</p>
+      </section>
+    </main>
+    <footer class="site-footer">
+      <div class="footer-brand">
+        <img
+          src="assets/logo-transparent.webp"
+          width="1000"
+          height="732"
+          alt="Lunch Box"
+        />
+        <p>Bold flavor. Packed fresh.</p>
+      </div>
+      <div>
+        <p class="footer-label">Explore</p>
+        <a href="catering.html">Catering</a><a href="menu.html">Menu & ordering</a
+        ><a href="order-status.html">Order status</a
+        ><a href="contact.html">Contact</a>
+      </div>
+      <div>
+        <p class="footer-label">Pickup location</p>
+        <p data-truck-location>Lunch Box</p>
+        <p data-truck-hours>Every day · 1 PM–11 PM</p>
+      </div>
+      <p class="footer-bottom">
+        © 2026 Lunch Box. All rights reserved. <span>Made fresh for pickup.</span>
+      </p>
+    </footer>
+    <div
+      class="cart-toast"
+      id="statusToast"
+      role="status"
+      aria-live="polite"
+    ></div>
+    <script src="config.js?v=20260817-2" defer></script>
+    <script src="vendor/convex-client.js?v=20260715-2" defer></script>
+    <script src="shared.js?v=20260715-7" defer></script>
+    <script src="ordering.js?v=20260817-6" defer></script>
+    <script src="order-status.js?v=20260718-1" defer></script>
+  </body>
+</html>

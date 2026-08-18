@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /admin-portal/
+Disallow: /convex/
+
+Sitemap: https://lunchbox.example/sitemap.xml
+

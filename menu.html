@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta
+      name="description"
+      content="Browse fresh Lunch Box meals and sides and order ahead for pickup."
+    />
+    <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1" />
+    <meta name="theme-color" content="#07130d" />
+    <title>Menu &amp; Online Ordering | Lunch Box</title>
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:site_name" content="Lunch Box" />
+    <meta property="og:title" content="Menu &amp; Online Ordering | Lunch Box" />
+    <meta property="og:description" content="Explore Lunch Box meals and sides and order ahead for pickup." />
+    <meta property="og:image" content="assets/images/lunch-box/4820.webp" />
+    <meta property="og:image:alt" content="A freshly packed Lunch Box meal" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Menu | Lunch Box" />
+    <meta name="twitter:description" content="Browse food and order ahead from Lunch Box." />
+    <meta name="twitter:image" content="assets/images/lunch-box/4820.webp" />
+    <link rel="icon" href="assets/logo-transparent.webp" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Sora:wght@500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css?v=lunchbox-17" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "name": "Lunch Box menu and online ordering",
+        "about": { "@type": "Restaurant", "name": "Lunch Box" }
+      }
+    </script>
+  </head>
+  <body data-page="menu">
+    <header class="site-header">
+      <a class="brand" href="index.html"
+        ><img
+          src="assets/logo-transparent.webp"
+          width="1000"
+          height="732"
+          alt="Lunch Box" /></a
+      ><button
+        class="menu-toggle"
+        data-menu-toggle
+        aria-label="Open navigation"
+        aria-expanded="false"
+      >
+        <span></span><span></span><span></span>
+      </button>
+      <nav class="main-nav" data-nav>
+        <a data-page="home" href="index.html">Home</a
+        ><a data-page="menu" href="menu.html">Menu</a
+        ><a data-page="catering" href="catering.html">Catering</a
+        ><a data-page="contact" href="contact.html">Contact Us</a
+        ><a
+          class="nav-cta"
+          href="#menuCatalog"
+          >Start Order</a
+        >
+      </nav>
+      <button
+        class="cart-button header-cart"
+        id="cartButton"
+        aria-label="Review cart"
+      >
+        <span>View Cart</span
+        ><span class="cart-preview-total" id="cartPreviewTotal">$0.00</span
+        ><strong id="cartCount">0</strong>
+      </button>
+    </header>
+    <div id="fulfillmentMount"></div>
+    <main>
+      <section class="menu-order-hero">
+        <div>
+          <p class="eyebrow">Pickup made simple</p>
+          <h1>Build your<br /><em>perfect box.</em></h1>
+          <p>
+            Choose your favorites, make them yours, and pick up fresh from today’s truck location.
+          </p>
+          <div class="menu-hero-actions">
+            <a class="button button-primary" href="#menuCatalog"
+              >Start your order</a
+            ><a class="button order-status-link" href="order-status.html"
+              >Check an order</a
+            >
+          </div>
+        </div>
+      </section>
+      <section class="menu-section modern-menu" id="menuCatalog">
+        <div class="menu-section-head">
+          <div>
+            <p class="eyebrow dark">Made for right now</p>
+            <h2>What are you<br />in the mood for?</h2>
+          </div>
+          <p>
+            Browse everything or jump to a category. Customize your box and choose the pickup time that works for you.
+          </p>
+        </div>
+        <nav
+          class="category-nav"
+          id="categoryNav"
+          aria-label="Filter menu by category"
+        ></nav>
+        <div class="menu-catalog" id="menuGrid">
+          <div class="loading-card">Loading today’s menu…</div>
+        </div>
+      </section>
+      <section class="status-promo">
+        <div>
+          <p class="eyebrow">Already ordered?</p>
+          <h2>See what’s happening<br /><em>in the kitchen.</em></h2>
+          <p>Follow your order from payment confirmation through preparation and pickup.</p>
+        </div>
+        <a class="button button-light" href="order-status.html"
+          >Check order status</a
+        >
+      </section>
+    </main>
+    <aside class="cart-drawer" id="cartDrawer" aria-hidden="true">
+      <div class="cart-head">
+        <div>
+          <p class="eyebrow dark">Your order</p>
+          <h2>Cart</h2>
+        </div>
+        <button class="icon-close" id="closeCart" aria-label="Close cart">
+          <span aria-hidden="true"></span>
+        </button>
+      </div>
+      <div id="cartItems" class="cart-items"></div>
+      <div class="cart-footer">
+        <div class="cart-fulfillment-summary"><small>Pickup</small><strong data-order-summary>Pickup details loading…</strong></div>
+        <div class="cart-total">
+          <span>Subtotal</span><strong id="cartTotal">$0.00</strong>
+        </div>
+        <button class="button button-primary full" id="checkoutButton" disabled>
+          Continue to checkout
+        </button>
+        <p>Secure online checkout will open when ordering launches.</p>
+      </div>
+    </aside>
+    <div class="scrim" id="scrim"></div>
+    <div
+      class="cart-toast"
+      id="cartToast"
+      role="status"
+      aria-live="polite"
+    ></div>
+    <dialog class="checkout-dialog customize-dialog" id="customizeDialog">
+      <button class="dialog-close" id="closeCustomize" aria-label="Close">
+        <span aria-hidden="true"></span>
+      </button>
+      <p class="eyebrow dark" id="customizeEyebrow">Make it yours</p>
+      <h2 id="customizeTitle">Customize your meal</h2>
+      <p class="customize-description" id="customizeDescription"></p>
+      <form id="customizeForm">
+        <div class="customize-groups" id="customizeGroups"></div>
+        <p class="form-message error" id="customizeMessage"></p>
+        <button
+          class="button button-primary full"
+          id="addCustomized"
+          type="submit"
+        >
+          Add to order
+        </button>
+      </form>
+    </dialog>
+    <dialog class="checkout-dialog" id="checkoutDialog">
+      <button class="dialog-close" id="closeCheckout" aria-label="Close">
+        <span aria-hidden="true"></span>
+      </button>
+      <p class="eyebrow dark">Checkout</p>
+      <h2>Finish your order.</h2>
+      <form id="checkoutForm">
+        <fieldset class="checkout-section checkout-timing">
+          <legend>1. When do you want your order?</legend>
+          <p class="checkout-section-note">Pickup is available every day from 1:00 PM to 11:00 PM.</p>
+          <div class="checkout-timing-options">
+            <label><input type="radio" name="pickupTiming" value="asap" checked /><span><strong>Order now</strong><small>Ready as soon as possible</small></span></label>
+            <label><input type="radio" name="pickupTiming" value="scheduled" /><span><strong>Order later</strong><small>Choose a pickup time</small></span></label>
+          </div>
+          <label class="checkout-time-select" id="checkoutTimeSelect">Pickup time<select id="scheduledPickupTime" aria-label="Choose a pickup time" disabled><option value="">Choose a time</option></select></label>
+          <div class="cart-fulfillment-summary"><small>Your pickup</small><strong id="pickupTimingSummary" data-order-summary>Pickup at Lunch Box · 1:00 PM–11:00 PM</strong></div>
+        </fieldset>
+        <fieldset class="checkout-section checkout-contact">
+          <legend>2. Your information</legend>
+          <label
+            >Full name<input
+              name="customerName"
+              required
+              minlength="2"
+              autocomplete="name"
+              placeholder="Your name" /></label
+          ><label
+            >Phone number<input
+              name="phone"
+              required
+              type="tel"
+              autocomplete="tel"
+              placeholder="(860) 555-0000" /></label
+          ><label
+            >Email<input
+              name="email"
+              required
+              type="email"
+              autocomplete="email"
+              placeholder="you@example.com" /></label
+          >
+        </fieldset>
+        <fieldset class="checkout-section checkout-order-review">
+          <legend>3. Review your food</legend>
+          <div id="checkoutItems"></div>
+          <button type="button" class="checkout-add-more" id="checkoutAddMore">+ Add sides or another item</button>
+          <label
+            >Order notes<textarea
+              name="notes"
+              rows="3"
+              placeholder="Allergies or special requests"
+            ></textarea></label
+          >
+        </fieldset>
+        <fieldset class="coupon-entry checkout-section">
+          <legend>Discount code</legend>
+          <div>
+            <input
+              id="couponCode"
+              name="couponCode"
+              autocomplete="off"
+              maxlength="32"
+              placeholder="Enter code"
+            />
+            <button type="button" id="applyCoupon">Apply</button>
+          </div>
+          <p id="couponMessage" aria-live="polite"></p>
+        </fieldset
+        ><fieldset class="tip-picker">
+          <legend>Add a tip</legend>
+          <p>Leave an optional tip for Lunch Box team.</p>
+          <div class="tip-options" id="tipOptions">
+            <button type="button" data-tip-percent="0">No tip</button>
+            <button type="button" data-tip-percent="15">15%</button>
+            <button type="button" data-tip-percent="20" class="active">20%</button>
+            <button type="button" data-tip-percent="25">25%</button>
+          </div>
+          <label class="custom-tip">Custom tip ($)<input name="customTip" id="customTip" type="number" min="0" step=".01" inputmode="decimal" placeholder="0.00" /></label>
+          <div class="checkout-discount" id="checkoutDiscount" hidden><span>Discount</span><strong id="checkoutDiscountAmount">−$0.00</strong></div>
+          <div class="checkout-total"><span>Order total</span><strong id="checkoutTotal">$0.00</strong></div>
+        </fieldset
+        ><label class="age-check"
+          ><input name="ageConfirmed" type="checkbox" required /><span
+            >I confirm that my order and contact details are correct.</span
+          ></label
+        ><button class="button button-primary full" type="submit" disabled>
+          Square checkout coming soon
+        </button>
+        <p class="form-message" id="checkoutMessage"></p>
+      </form>
+    </dialog>
+    <footer class="site-footer">
+      <div class="footer-brand">
+        <img
+          src="assets/logo-transparent.webp"
+          width="1000"
+          height="732"
+          alt="Lunch Box"
+        />
+        <p>Bold flavor. Packed fresh.</p>
+      </div>
+      <div>
+        <p class="footer-label">Explore</p>
+        <a href="catering.html">Catering</a><a href="menu.html">Menu & ordering</a
+        ><a href="order-status.html">Order status</a
+        ><a href="contact.html">Contact</a>
+      </div>
+      <div>
+        <p class="footer-label">Pickup location</p>
+        <p data-truck-location>Lunch Box</p>
+        <p data-truck-hours>Every day · 1 PM–11 PM</p>
+      </div>
+      <div>
+        <p class="footer-label">Follow the fun</p>
+        <div class="social-links">
+          <a
+            class="social-link instagram"
+            href="contact.html"
+            target="_blank"
+            rel="noopener"
+            aria-label="Follow Lunch Box on Instagram"
+            ><svg aria-hidden="true" viewBox="0 0 24 24">
+              <rect x="3" y="3" width="18" height="18" rx="5"></rect>
+              <circle cx="12" cy="12" r="4.25"></circle>
+              <circle class="social-dot" cx="17.4" cy="6.7" r="1"></circle></svg
+            ><span>Instagram</span></a
+          ><a
+            class="social-link facebook"
+            href="https://www.facebook.com/"
+            target="_blank"
+            rel="noopener"
+            aria-label="Visit Facebook"
+            ><svg aria-hidden="true" viewBox="0 0 24 24">
+              <path
+                d="M14 8h3V4h-3c-3.3 0-5 2-5 5v2H6v4h3v7h4v-7h3.5l.5-4h-4V9c0-.7.3-1 1-1Z"
+              ></path></svg
+            ><span>Facebook</span></a
+          >
+        </div>
+      </div>
+      <p class="footer-bottom">
+        © 2026 Lunch Box. All rights reserved. <span>Made fresh for pickup.</span>
+      </p>
+    </footer>
+    <script src="config.js?v=20260817-2" defer></script>
+    <script src="vendor/convex-client.js?v=20260715-2" defer></script>
+    <script src="data.js?v=20260817-1" defer></script>
+    <script src="shared.js?v=20260715-7" defer></script>
+    <script src="ordering.js?v=20260817-6" defer></script>
+    <script src="menu.js?v=20260817-1" defer></script>
+  </body>
+</html>
