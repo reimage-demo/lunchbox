@@ -2032,7 +2032,7 @@ body[data-page="events"] .booking-banner p:not(.eyebrow) {
     height: 82px;
     padding: 10px 20px;
     grid-template-columns: 1fr auto;
-    background: #07130d;
+    background: #090909;
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
   }
@@ -2086,7 +2086,7 @@ body[data-page="events"] .booking-banner p:not(.eyebrow) {
     overflow-y: auto;
     overscroll-behavior: contain;
     color: #fff;
-    background: linear-gradient(160deg, #07130d 0%, #0a2515 100%);
+    background: #090909;
     box-shadow: none;
     opacity: 0;
     visibility: hidden;
@@ -2119,7 +2119,7 @@ body[data-page="events"] .booking-banner p:not(.eyebrow) {
     letter-spacing: -0.02em;
   }
   .main-nav > a:not(.nav-cta).active {
-    color: var(--yellow);
+    color: #ed1c24;
     border-color: rgba(255, 255, 255, 0.12);
   }
   .main-nav .nav-cta,
