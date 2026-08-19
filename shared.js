@@ -53,7 +53,7 @@
     legalLinks.className = "legal-links";
     legalLinks.setAttribute("aria-label", "Legal and accessibility");
     legalLinks.innerHTML =
-      '<a href="privacy.html">Privacy</a><a href="terms.html">Terms</a><a href="cookie-policy.html">Cookies</a><a href="accessibility.html">Accessibility</a><a href="refund-policy.html">Refunds</a><button type="button" data-cookie-settings>Cookie settings</button>';
+      '<a href="privacy.html">Privacy</a><a href="terms.html">Terms</a><a href="cookie-policy.html">Cookies</a><a href="accessibility.html">Accessibility</a><a href="refund-policy.html">Refunds</a>';
     footerBottom.before(legalLinks);
   }
 
@@ -64,61 +64,6 @@
       'Powered by <a href="https://www.reimagebs.com" target="_blank" rel="noopener noreferrer">REIMAGE BUSINESS SOLUTIONS</a>';
     footerBottom.before(footerCredit);
   }
-
-  const consentKey = "lunchbox_cookie_preference_v1";
-  let consentBanner;
-  function readConsent() {
-    try {
-      return (
-        JSON.parse(localStorage.getItem(consentKey) || "null")?.choice || null
-      );
-    } catch {
-      return null;
-    }
-  }
-  function saveConsent(choice) {
-    try {
-      localStorage.setItem(
-        consentKey,
-        JSON.stringify({
-          choice,
-          version: 1,
-          updatedAt: new Date().toISOString(),
-        }),
-      );
-    } catch {}
-    document.documentElement.dataset.cookieConsent = choice;
-    consentBanner?.setAttribute("hidden", "");
-  }
-  function showConsent() {
-    if (!consentBanner) return;
-    consentBanner.removeAttribute("hidden");
-  }
-  function setupConsent() {
-    consentBanner = document.createElement("section");
-    consentBanner.className = "cookie-banner";
-    consentBanner.setAttribute("role", "dialog");
-    consentBanner.setAttribute("aria-label", "Cookie choices");
-    consentBanner.setAttribute("aria-live", "polite");
-    consentBanner.setAttribute("hidden", "");
-    consentBanner.innerHTML =
-      '<div><h2>Your privacy choices</h2><p>We use necessary browser storage to operate this website and remember your preference. We do not currently use analytics or advertising cookies. <a href="cookie-policy.html">Read the cookie policy</a>.</p></div><div class="cookie-actions"><button type="button" class="cookie-deny" data-cookie-choice="denied">Deny optional cookies</button><button type="button" class="cookie-accept" data-cookie-choice="accepted">Accept optional cookies</button></div>';
-    document.body.append(consentBanner);
-    consentBanner
-      .querySelectorAll("[data-cookie-choice]")
-      .forEach((button) =>
-        button.addEventListener("click", () =>
-          saveConsent(button.dataset.cookieChoice),
-        ),
-      );
-    const savedChoice = readConsent();
-    document.documentElement.dataset.cookieConsent = savedChoice || "unset";
-    if (!savedChoice) showConsent();
-  }
-  setupConsent();
-  document
-    .querySelectorAll("[data-cookie-settings]")
-    .forEach((button) => button.addEventListener("click", showConsent));
 
   const moneyFormatter = new Intl.NumberFormat("en-US", {
     style: "currency",
@@ -156,8 +101,12 @@
 
   function resolveAssetUrl(value = "") {
     if (!value || /^(?:https?:|blob:|data:)/i.test(value)) return value;
+    const isLocalPreview = ["localhost", "127.0.0.1"].includes(
+      window.location.hostname,
+    );
     const base =
-      window.LUNCHBOX_CONFIG?.publicSiteUrl || document.baseURI;
+      (isLocalPreview ? document.baseURI : window.LUNCHBOX_CONFIG?.publicSiteUrl) ||
+      document.baseURI;
     return new URL(String(value).replace(/^\.\//, "").replace(/^\//, ""), base)
       .href;
   }

@@ -15,9 +15,10 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Sora:wght@500;600;700;800&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="styles.css?v=lunchbox-18" />
+    <link rel="stylesheet" href="styles.css?v=lunchbox-30" />
   </head>
   <body data-page="legal">
+    <a class="skip-link" href="#mainContent">Skip to main content</a>
     <header class="site-header">
       <a class="brand" href="index.html"
         ><img
@@ -38,7 +39,7 @@
         ><a href="catering.html">Catering</a><a href="contact.html">Contact Us</a>
       </nav>
     </header>
-    <main>
+    <main id="mainContent">
       <section class="legal-hero">
         <div>
           <p class="eyebrow">Browser storage</p>
@@ -52,15 +53,14 @@
       <section class="legal-content">
         <article class="legal-document">
           <p class="legal-updated">
-            <strong>Effective and last updated:</strong> July 15, 2026
+            <strong>Effective and last updated:</strong> August 18, 2026
           </p>
           <section class="legal-callout">
             <h2>Current status</h2>
             <p>
-              Lunch Box website does not currently use analytics cookies,
-              advertising cookies, or behavioral tracking pixels. We use
-              necessary browser storage to remember your cookie choice and to
-              support essential functionality.
+              The public Lunch Box website does not currently set first-party
+              cookies, use local or session storage, run analytics, or load
+              advertising or behavioral-tracking pixels.
             </p>
           </section>
           <section>
@@ -74,85 +74,80 @@
             </p>
           </section>
           <section>
-            <h2>2. Technologies currently used</h2>
-            <h3>Cookie preference</h3>
+            <h2>2. Public website technology</h2>
             <p>
-              We store a record named <code>lunchbox_cookie_preference_v1</code> in
-              local storage after you select Accept or Deny. It contains your
-              choice, a policy version, and the date of the choice. This is
-              necessary to remember your preference. It remains until you clear
-              browser storage or replace your choice through “Cookie settings.”
+              The site loads its static pages from GitHub Pages and public menu,
+              location, and order-status data from Convex. Those providers may
+              maintain server logs containing IP address, request time, browser
+              or device details, request identifiers, function names, and error
+              or security information. Server logs are not browser cookies and
+              cannot be controlled by a cookie button on this site.
             </p>
-            <h3>Admin session storage</h3>
             <p>
-              The separate admin portal uses session storage to keep an
-              authorized staff session active within the current browser tab. It
-              is not used for customer advertising and is removed when staff
-              sign out or the browser session ends.
+              Pages request Inter and Sora font files from Google Fonts. This
+              causes your browser to connect to Google and provide ordinary
+              network-request information. The site does not use Google
+              Analytics.
             </p>
-            <h3>Operational data</h3>
             <p>
-              Our hosting and backend providers may process request logs, IP
-              addresses, timestamps, errors, and security information needed to
-              deliver and protect their services. These records are not
-              controlled by the cookie buttons in your browser.
+              An earlier version of the site stored
+              <code>lunchbox_cookie_preference_v1</code> in local storage. The
+              current code does not read or update that record. If it remains
+              in your browser from an earlier visit, you can remove it by
+              clearing this site’s browser storage.
             </p>
           </section>
           <section>
-            <h2>3. Optional cookies</h2>
+            <h2>3. Staff-only browser storage</h2>
             <p>
-              No optional analytics or advertising cookies are currently active.
-              Selecting “Accept optional cookies” records consent in case we add
-              clearly disclosed optional functionality later; it does not
-              currently activate any analytics or advertising service. Selecting
-              “Deny optional cookies” records that optional technologies must
-              remain disabled.
+              The separate admin portal uses session storage to keep an
+              authorized staff session active within the current browser tab and
+              local storage to remember whether the admin sidebar is collapsed.
+              The session token is cleared when staff sign out and session
+              storage normally clears when the tab or browser session ends.
+              Server-side session limits still apply.
             </p>
           </section>
           <section>
             <h2>4. Third-party services</h2>
             <p>
-              When Square payment services are enabled, or when you leave our site for AppiSpot
-              booking, maps, or social platforms, those services may use cookies
-              under their own policies. Your choice on this website does not
-              control storage placed directly by a third-party site you visit.
+              If you choose a Google Maps directions link, an available DoorDash
+              or Uber Eats storefront, or another external link,
+              the destination may use cookies under its own policy. This website
+              does not control storage set after you leave it.
             </p>
           </section>
           <section>
-            <h2>5. Managing your choice</h2>
+            <h2>5. Browser controls</h2>
             <p>
-              Use the Accept or Deny buttons in the cookie notice. You can
-              reopen the notice at any time with “Cookie settings” in the
-              footer. You may also clear or block browser storage through your
-              browser settings. Blocking necessary storage may cause the site to
-              ask for your preference again or affect essential functionality.
+              You can block third-party requests or clear browser storage using
+              your browser settings. Blocking Google Fonts may cause fallback
+              fonts to appear. Blocking Convex requests may prevent live menu,
+              location, and status information from loading.
             </p>
           </section>
           <section>
-            <h2>6. Global Privacy Control</h2>
+            <h2>6. No sale or targeted advertising</h2>
             <p>
               We do not currently sell personal data or use it for targeted
-              advertising. If that changes, we intend to honor legally required
-              opt-out preference signals, including Global Privacy Control,
-              where applicable.
+              advertising. Because the public site has no sale or
+              targeted-advertising activity, a Global Privacy Control signal
+              does not change any site behavior.
             </p>
           </section>
           <section>
             <h2>7. Changes to this policy</h2>
             <p>
-              If our use of cookies or similar technologies changes, we will
-              update this page, revise the date, and request consent when
-              legally required before enabling optional technologies.
+              If we add cookies, analytics, advertising, or other browser
+              storage, we will update this page and add a consent or opt-out
+              control before activation when required by law.
             </p>
           </section>
           <section class="legal-contact">
             <h2>Questions</h2>
             <p>
-              Email
-              <a href="mailto:contact@lunchbox.example"
-                >contact@lunchbox.example</a
-              >
-              with questions about cookies or privacy.
+              Call <a href="tel:+18605022183">(860) 502-2183</a> with
+              questions about cookies or privacy.
             </p>
           </section>
         </article>
@@ -176,12 +171,12 @@
       <div>
         <p class="footer-label">Contact</p>
         <a href="contact.html">Contact us</a
-        ><a href="mailto:contact@lunchbox.example">Email Lunch Box</a>
+        ><a href="tel:+18605022183">Call (860) 502-2183</a>
       </div>
       <p class="footer-bottom">
         © 2026 Lunch Box. All rights reserved. <span>Made fresh for pickup.</span>
       </p>
     </footer>
-    <script src="shared.js?v=20260817-3" defer></script>
+    <script src="shared.js?v=20260818-2" defer></script>
   </body>
 </html>

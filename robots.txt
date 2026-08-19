@@ -3,5 +3,4 @@ Allow: /
 Disallow: /admin-portal/
 Disallow: /convex/
 
-Sitemap: https://lunchbox.example/sitemap.xml
-
+Sitemap: https://reimage-demo.github.io/lunchbox/sitemap.xml

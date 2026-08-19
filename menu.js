@@ -1,4 +1,4 @@
-const { fallbackMenu } = window.LunchBoxData;
+const { fallbackMenu, applyBrandImages } = window.LunchBoxData;
 const { escapeHtml, money, resolveAssetUrl } = window.LunchBoxUtils;
 
 const menuGrid = document.querySelector("#menuGrid");
@@ -67,7 +67,11 @@ function renderMenu() {
       ? `Starting at ${money(item.price)}`
       : money(item.price);
     const actionLabel = "Add";
-    return `<article class="menu-card${item.isFeatured ? " is-featured" : ""}${item.isDrinkOfNight ? " drink-of-night" : ""}${item.isCustomDrink ? " custom-drink" : ""}${item.isBottleService ? " bottle-service-card" : ""}"><div class="menu-card-media">${badge}${item.imageUrl ? `<img src="${escapeHtml(resolveAssetUrl(item.imageUrl))}" width="800" height="600" loading="lazy" decoding="async" alt="${escapeHtml(item.name)}">` : '<div class="menu-photo-placeholder"><span>Photo coming soon</span></div>'}<button type="button" class="add-button" data-add="${item._id}" aria-label="${actionLabel} ${escapeHtml(item.name)}"><span>${actionLabel}</span><b aria-hidden="true"><svg viewBox="0 0 20 20" focusable="false"><path d="M10 4v12M4 10h12" /></svg></b></button></div><div class="menu-card-body"><div class="menu-card-top"><h3>${escapeHtml(item.name)}</h3><span class="menu-card-price">${priceLabel}</span></div><p>${escapeHtml(item.description)}</p></div></article>`;
+    const addButton = `<button type="button" class="add-button" data-add="${item._id}" aria-label="${actionLabel} ${escapeHtml(item.name)}"><span>${actionLabel}</span><b aria-hidden="true"><svg viewBox="0 0 20 20" focusable="false"><path d="M10 4v12M4 10h12" /></svg></b></button>`;
+    const media = item.imageUrl
+      ? `<div class="menu-card-media">${badge}<img src="${escapeHtml(resolveAssetUrl(item.imageUrl))}" width="800" height="600" loading="lazy" decoding="async" alt="${escapeHtml(item.name)}">${addButton}</div>`
+      : "";
+    return `<article class="menu-card${item.imageUrl ? "" : " no-image"}${item.isFeatured ? " is-featured" : ""}${item.isDrinkOfNight ? " drink-of-night" : ""}${item.isCustomDrink ? " custom-drink" : ""}${item.isBottleService ? " bottle-service-card" : ""}">${media}<div class="menu-card-body"><div class="menu-card-top"><h3>${escapeHtml(item.name)}</h3><span class="menu-card-price">${priceLabel}</span></div><p>${escapeHtml(item.description)}</p>${item.imageUrl ? "" : addButton}</div></article>`;
   };
   const visibleRegular =
     activeCategory === "All"
@@ -277,7 +281,7 @@ function renderCart() {
     ? lines
         .map(({ key, item, selectedOptions, quantity }) => {
           const options = optionDetails(item, selectedOptions);
-          return `<div class="cart-item">${item.imageUrl ? `<img src="${escapeHtml(resolveAssetUrl(item.imageUrl))}" width="64" height="64" alt="">` : '<span class="cart-item-placeholder">P</span>'}<div><h3>${escapeHtml(item.name)}</h3>${options.length ? `<p class="cart-options">${options.map((option) => escapeHtml(option.name)).join(" · ")}</p>` : ""}<p>${money(lineUnitPrice(item, selectedOptions))} each</p></div><div class="quantity"><button data-minus="${escapeHtml(key)}" aria-label="Remove one">−</button><span>${quantity}</span><button data-plus="${escapeHtml(key)}" aria-label="Add one">+</button></div></div>`;
+          return `<div class="cart-item${item.imageUrl ? "" : " no-image"}">${item.imageUrl ? `<img src="${escapeHtml(resolveAssetUrl(item.imageUrl))}" width="64" height="64" alt="">` : ""}<div><h3>${escapeHtml(item.name)}</h3>${options.length ? `<p class="cart-options">${options.map((option) => escapeHtml(option.name)).join(" · ")}</p>` : ""}<p>${money(lineUnitPrice(item, selectedOptions))} each</p></div><div class="quantity"><button data-minus="${escapeHtml(key)}" aria-label="Remove one">−</button><span>${quantity}</span><button data-plus="${escapeHtml(key)}" aria-label="Add one">+</button></div></div>`;
         })
         .join("")
     : '<div class="cart-empty">Your cart is ready for something good.</div>';
@@ -456,7 +460,7 @@ function startLiveData() {
         const nextSignature = JSON.stringify(nextMenu);
         if (nextSignature === menuSignature) return;
         menuSignature = nextSignature;
-        menu = nextMenu;
+        menu = applyBrandImages(nextMenu);
         renderMenu();
         renderCart();
       },

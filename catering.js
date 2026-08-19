@@ -1,5 +1,5 @@
 (function () {
-  const { fallbackMenu } = window.LunchBoxData;
+  const { fallbackMenu, applyBrandImages } = window.LunchBoxData;
   const { escapeHtml, money, resolveAssetUrl } = window.LunchBoxUtils;
   const grid = document.querySelector("#cateringGrid");
   const convexClient =
@@ -32,10 +32,8 @@
         const choices = (item.optionGroups || [])
           .map((group) => `<li>${escapeHtml(group.name)}</li>`)
           .join("");
-        return `<article class="catering-card">
-          <div class="catering-card-media">
-            ${item.imageUrl ? `<img src="${escapeHtml(resolveAssetUrl(item.imageUrl))}" width="800" height="600" loading="lazy" decoding="async" alt="${escapeHtml(item.name)}">` : '<div class="menu-photo-placeholder"><span>Photo coming soon</span></div>'}
-          </div>
+        return `<article class="catering-card${item.imageUrl ? "" : " no-image"}">
+          ${item.imageUrl ? `<div class="catering-card-media"><img src="${escapeHtml(resolveAssetUrl(item.imageUrl))}" width="800" height="600" loading="lazy" decoding="async" alt="${escapeHtml(item.name)}"></div>` : ""}
           <div class="catering-card-copy">
             <div><p class="eyebrow dark">Catering</p><span>${price}</span></div>
             <h3>${escapeHtml(item.name)}</h3>
@@ -53,7 +51,7 @@
     unsubscribe = convexClient.onUpdate(
       "menuItems:listAvailable",
       {},
-      render,
+      (items) => render(applyBrandImages(items)),
       (error) => console.warn("Using the local catering preview.", error),
     );
   }

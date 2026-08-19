@@ -1,35 +1,23 @@
 :root {
-  --forest: #07130d;
-  --forest-2: #0d2417;
-  --green: #10aa57;
-  --lime: #b6e450;
-  --yellow: #ffd22f;
-  --red: #ff4a3d;
-  --cream: #f5f2e9;
-  --paper: #fffdf8;
-  --ink: #132018;
-  --muted: #68736b;
-  --line: rgba(19, 32, 24, 0.14);
-  --radius: 28px;
-  --shadow: 0 30px 80px rgba(5, 21, 12, 0.15);
-  font-family: "DM Sans", sans-serif;
-}
-
-/* Lunch Box brand overrides. The original layout system remains intact while
-   the duplicate uses the supplied logo's black, white and red palette. */
-:root {
-  --forest: #090909;
-  --forest-2: #151515;
-  --green: #ed1c24;
-  --lime: #ff4b52;
-  --yellow: #ffffff;
-  --red: #ed1c24;
-  --cream: #f5f3ef;
-  --paper: #ffffff;
-  --ink: #171717;
-  --muted: #6f6a67;
-  --line: rgba(23, 23, 23, 0.14);
-  --shadow: 0 30px 80px rgba(0, 0, 0, 0.18);
+  --brand-red: #f21f26;
+  --brand-black: #111111;
+  --brand-white: #ffffff;
+  --brand-off-white: #f7f7f4;
+  --brand-light-gray: #ececea;
+  --brand-muted: #5e5e5a;
+  --forest: var(--brand-black);
+  --forest-2: #1b1b1b;
+  --green: var(--brand-red);
+  --lime: var(--brand-red);
+  --yellow: var(--brand-white);
+  --red: var(--brand-red);
+  --cream: var(--brand-off-white);
+  --paper: var(--brand-white);
+  --ink: var(--brand-black);
+  --muted: var(--brand-muted);
+  --line: rgba(17, 17, 17, 0.2);
+  --radius: 12px;
+  --shadow: 0 8px 0 rgba(17, 17, 17, 0.08);
   font-family: "Inter", sans-serif;
 }
 
@@ -549,7 +537,7 @@ h2 em {
 .events-hero {
   background:
     linear-gradient(90deg, rgba(5, 20, 11, 0.9), rgba(5, 20, 11, 0.25)),
-    url("assets/images/lunch-box/4884.webp") center/cover;
+    url("assets/images/lunch-box/garett-grilling.webp") center 42% / cover;
 }
 .events-section,
 .menu-section {
@@ -1148,7 +1136,7 @@ h2 em {
 .menu-order-hero {
   background:
     linear-gradient(rgba(0, 0, 0, 0.62), rgba(0, 0, 0, 0.62)),
-    url("assets/images/lunch-box/4121.webp") center 58% / cover;
+    url("assets/images/lunch-box/garett-grilling.webp") center 42% / cover;
 }
 
 .menu-hero-actions {
@@ -1225,7 +1213,7 @@ body[data-page="events"] .booking-banner p:not(.eyebrow) {
 
 .food-gallery-heading h2 {
   margin: 0;
-  font-size: clamp(45px, 6vw, 82px);
+  font-size: clamp(31.5px, 4.2vw, 57.4px);
   line-height: 0.98;
   letter-spacing: -0.05em;
 }
@@ -1330,6 +1318,79 @@ body[data-page="events"] .booking-banner p:not(.eyebrow) {
 
   .home-order-actions .button {
     width: 100%;
+  }
+}
+
+/* The home hero is intentionally image-free. */
+body[data-page="home"] .home-hero {
+  background: #000 !important;
+}
+
+body[data-page="home"] .home-hero .hero-shade {
+  display: none !important;
+}
+
+body[data-page="menu"] .menu-order-hero {
+  background: #000 !important;
+}
+
+/* Menu entries without a truthful supplied photo stay intentionally text-only. */
+body[data-page="menu"] .modern-menu .menu-card.no-image {
+  min-height: 248px;
+  display: flex;
+  overflow: hidden;
+  border: 1px solid rgba(17, 17, 17, .12);
+  border-radius: 18px;
+  background: #fff;
+}
+
+body[data-page="menu"] .modern-menu .menu-card.no-image .menu-card-body {
+  width: 100%;
+  min-height: 248px;
+  padding: 25px;
+  display: flex;
+  flex-direction: column;
+}
+
+body[data-page="menu"] .modern-menu .menu-card.no-image .menu-card-body > p {
+  margin-bottom: 24px;
+}
+
+body[data-page="menu"] .modern-menu .menu-card.no-image .add-button,
+body[data-page="menu"] .modern-menu .menu-card.no-image .add-button:hover,
+body[data-page="menu"] .modern-menu .menu-card.no-image .add-button:active {
+  position: static;
+  align-self: flex-start;
+  margin-top: auto;
+}
+
+.cart-item.no-image {
+  grid-template-columns: 1fr auto;
+}
+
+.catering-card.no-image .catering-card-copy {
+  min-height: 320px;
+  display: flex;
+  flex-direction: column;
+}
+
+.catering-card.no-image .text-link {
+  margin-top: auto;
+}
+
+@media (max-width: 760px) {
+  body[data-page="menu"] .modern-menu .menu-card.no-image,
+  body[data-page="menu"] .modern-menu .menu-card.no-image .menu-card-body {
+    min-height: 210px;
+  }
+
+  .cart-item.no-image {
+    grid-template-columns: 1fr auto;
+  }
+
+  .cart-item.no-image .quantity {
+    grid-column: 2;
+    grid-row: 1;
   }
 }
 
@@ -2589,7 +2650,7 @@ body[data-page="menu"] .main-nav {
       rgba(4, 18, 10, 0.72) 52%,
       rgba(4, 18, 10, 0.28) 100%
     ),
-    url("assets/images/lunch-box/4121.webp") center 58% / cover;
+    url("assets/images/lunch-box/garett-grilling.webp") center 42% / cover;
 }
 .menu-order-hero > div {
   position: relative;
@@ -3667,7 +3728,6 @@ body[data-page="status"] em {
     padding-bottom: calc(78px + env(safe-area-inset-bottom));
   }
 }
-
 
 /* Transparent Lunch Box identity and final non-green action palette. */
 .brand img,
@@ -5432,7 +5492,7 @@ body[data-page="menu"] .modern-menu .add-button svg path {
 .menu-order-hero {
   background:
     linear-gradient(rgba(0, 0, 0, 0.62), rgba(0, 0, 0, 0.62)),
-    url("assets/images/lunch-box/4121.webp") center 58% / cover;
+    url("assets/images/lunch-box/garett-grilling.webp") center 42% / cover;
 }
 
 .menu-hero-actions {
@@ -5875,50 +5935,54 @@ body[data-page="home"] .home-hero .hero-copy h1 {
 /* Homepage pickup address belongs with the ordering call to action. */
 .home-hero .hero-location {
   margin-top: 22px;
-  padding: 13px 18px;
-  display: inline-flex;
-  align-items: center;
-  gap: 14px;
-  border: 1px solid rgba(255, 255, 255, .42);
-  border-radius: 999px;
+  padding: 4px 0;
+  display: inline-grid;
+  justify-items: center;
+  gap: 5px;
+  border: 0;
+  border-radius: 0;
   color: #fff;
-  background: rgba(0, 0, 0, .68);
-  box-shadow: 0 14px 34px rgba(0, 0, 0, .3);
-  text-shadow: none;
-  backdrop-filter: blur(12px);
-  transition: border-color 160ms ease, background 160ms ease, transform 160ms ease;
+  background: none;
+  box-shadow: none;
+  text-shadow: inherit;
+  backdrop-filter: none;
+  transition: opacity 160ms ease, transform 160ms ease;
 }
-.home-hero .hero-location:hover { transform: translateY(-1px); border-color: #fff; background: rgba(0, 0, 0, .82); }
+.home-hero .hero-location:hover { opacity: .82; transform: translateY(-1px); }
 .home-hero .hero-location:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
 .home-hero .hero-location > svg {
-  width: 22px;
-  height: 22px;
+  width: 18px;
+  height: 18px;
   flex: none;
   fill: none;
-  stroke: #ed1c24;
+  stroke: currentColor;
+  opacity: .78;
   stroke-width: 1.8;
   stroke-linecap: round;
   stroke-linejoin: round;
 }
-.home-hero .hero-location > div { display: grid; gap: 1px; text-align: left; }
-.home-hero .hero-location small {
-  color: rgba(255, 255, 255, .72);
-  font-size: 9px;
-  font-weight: 800;
-  letter-spacing: .12em;
-  line-height: 1.2;
-  text-transform: uppercase;
-}
+.home-hero .hero-location > div { display: grid; text-align: center; }
 .home-hero .hero-location strong { color: #fff; font-size: 15px; line-height: 1.35; }
 .home-hero .hero-location + .button-row { margin-top: 22px; }
 
 @media (max-width: 560px) {
+  .home-hero .hero-copy {
+    text-align: center;
+  }
+  .home-hero .hero-copy > p:not(.eyebrow) {
+    margin-inline: auto;
+  }
+  .home-hero .button-row {
+    justify-content: center;
+  }
   .home-hero .hero-location {
     width: min(330px, 100%);
-    padding: 13px 15px;
-    border-radius: 18px;
+    padding: 4px 0;
   }
-  .home-hero .hero-location strong { font-size: 13px; }
+  .home-hero .hero-location strong {
+    font-size: 13px;
+    text-align: center;
+  }
 }
 
 /* Give every public page the visual density of an 80% browser zoom on larger
@@ -5937,4 +6001,281 @@ body[data-page="home"] .home-hero .hero-copy h1 {
   .home-hero {
     min-height: clamp(650px, 87.5vh, 900px);
   }
+}
+
+/* Keep the footer mark secondary to the navigation and policy content. */
+.site-footer .footer-brand img {
+  width: min(145px, 100%);
+  height: auto;
+}
+
+@media (max-width: 680px) {
+  .site-footer .footer-brand img {
+    width: 120px;
+  }
+}
+
+/* Founder story and owner collage. */
+.about-story {
+  padding: clamp(76px, 9vw, 132px) 6vw;
+  display: grid;
+  grid-template-columns: minmax(420px, 1.05fr) minmax(380px, .95fr);
+  align-items: center;
+  gap: clamp(48px, 7vw, 110px);
+  background: #fff;
+}
+
+.about-collage {
+  min-width: 0;
+  height: clamp(560px, 57vw, 760px);
+  display: grid;
+  grid-template-columns: 1.08fr .92fr;
+  grid-template-rows: 1fr 1fr;
+  gap: clamp(10px, 1.3vw, 18px);
+}
+
+.about-photo {
+  min-width: 0;
+  min-height: 0;
+  margin: 0;
+  overflow: hidden;
+  border-radius: 24px;
+  background: #111;
+  box-shadow: 0 20px 55px rgba(0, 0, 0, .13);
+}
+
+.about-photo-primary {
+  grid-row: 1 / -1;
+}
+
+.about-photo img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.about-photo-primary img { object-position: 50% 42%; }
+.about-photo-together img { object-position: 50% 24%; }
+.about-photo-portrait img { object-position: 50% 24%; }
+
+.about-copy {
+  max-width: 670px;
+}
+
+.about-copy h2 {
+  margin: 8px 0 28px;
+  color: #111;
+  font: 700 clamp(48px, 5.4vw, 82px)/.96 "Sora", sans-serif;
+  letter-spacing: -.055em;
+}
+
+.about-copy h2 em {
+  color: #ed1c24;
+  font-style: normal;
+}
+
+.about-copy > p:not(.eyebrow) {
+  max-width: 620px;
+  color: #5d625e;
+  font-size: clamp(15px, 1.25vw, 18px);
+  line-height: 1.75;
+}
+
+.about-copy .about-lead {
+  color: #171917 !important;
+  font-size: clamp(19px, 1.7vw, 25px) !important;
+  font-weight: 600;
+  line-height: 1.5 !important;
+}
+
+/* Branded meal artwork: three cards, then a balanced pair. */
+.food-gallery {
+  width: min(1240px, 100%);
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: clamp(12px, 1.5vw, 20px);
+}
+
+.food-gallery figure {
+  grid-column: span 2;
+  margin: 0;
+  overflow: hidden;
+  border-radius: 18px;
+  background: #050505;
+  box-shadow: 0 16px 38px rgba(0, 0, 0, .14);
+}
+
+.food-gallery figure:nth-last-child(-n + 2) {
+  grid-column: span 3;
+}
+
+.food-gallery figure img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 5 / 4;
+  object-fit: contain;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.food-gallery figcaption {
+  padding: 15px 18px 17px;
+  color: #fff;
+  border-top: 1px solid rgba(255, 255, 255, .1);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .1em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+@media (max-width: 980px) {
+  .about-story {
+    grid-template-columns: 1fr 1fr;
+    gap: 38px;
+    padding-inline: 30px;
+  }
+
+  .about-collage {
+    height: 610px;
+  }
+}
+
+@media (max-width: 760px) {
+  .about-story {
+    grid-template-columns: 1fr;
+    gap: 42px;
+    padding: 66px 20px 76px;
+  }
+
+  .about-collage {
+    height: auto;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: minmax(380px, 58svh) 230px;
+  }
+
+  .about-photo-primary {
+    grid-column: 1 / -1;
+    grid-row: 1;
+  }
+
+  .about-photo-together,
+  .about-photo-portrait {
+    grid-row: 2;
+  }
+
+  .about-photo {
+    border-radius: 17px;
+  }
+
+  .about-copy {
+    text-align: center;
+  }
+
+  .about-copy > p:not(.eyebrow) {
+    margin-inline: auto;
+  }
+
+  .food-gallery {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .food-gallery figure,
+  .food-gallery figure:nth-last-child(-n + 2) {
+    grid-column: auto;
+  }
+
+  .food-gallery figure:last-child {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 560px) {
+  .about-collage {
+    grid-template-rows: minmax(360px, 56svh) 185px;
+    gap: 9px;
+  }
+
+  .about-copy h2 {
+    font-size: clamp(42px, 12vw, 58px);
+  }
+
+  .food-gallery {
+    grid-template-columns: 1fr;
+  }
+
+  .food-gallery figure,
+  .food-gallery figure:last-child {
+    grid-column: 1;
+  }
+}
+
+/* Preserve the previously requested image-free menu hero. */
+body[data-page="menu"] .menu-order-hero {
+  background: #111 !important;
+  background-image: none !important;
+}
+
+/* Shared off-white hero surface across every public page. */
+body[data-page="home"] .home-hero,
+body[data-page="menu"] .menu-order-hero,
+.catering-hero,
+.contact-intro,
+.legal-hero,
+.page-hero,
+.menu-hero,
+.status-hero,
+.events-title-band {
+  color: var(--brand-black) !important;
+  background: var(--brand-off-white) !important;
+  background-image: none !important;
+  border-bottom: 1px solid rgba(17, 17, 17, 0.18);
+}
+
+body[data-page="home"] .home-hero .hero-shade {
+  display: none !important;
+}
+
+body[data-page="home"] .home-hero .hero-copy,
+body[data-page="home"] .home-hero .hero-copy h1,
+body[data-page="menu"] .menu-order-hero h1,
+.catering-hero h1,
+.contact-intro h1,
+.legal-hero h1,
+.page-hero h1,
+.menu-hero h1,
+.status-hero h1,
+.events-title-band h1 {
+  color: var(--brand-black) !important;
+  text-shadow: none !important;
+}
+
+body[data-page="home"] .home-hero .hero-copy h1 em,
+body[data-page="menu"] .menu-order-hero h1 em,
+.contact-intro h1 em,
+.page-hero h1 em,
+.menu-hero h1 em,
+.status-hero h1 em {
+  color: var(--brand-red) !important;
+}
+
+body[data-page="home"] .home-hero .hero-copy > p:not(.eyebrow),
+body[data-page="menu"] .menu-order-hero > div > p:not(.eyebrow),
+.catering-hero p:not(.eyebrow),
+.legal-hero p:not(.eyebrow),
+.page-hero p:not(.eyebrow),
+.menu-hero p:not(.eyebrow),
+.status-hero p:not(.eyebrow),
+.events-title-band p:not(.eyebrow) {
+  color: var(--brand-muted) !important;
+}
+
+body[data-page="home"] .home-hero .hero-location,
+body[data-page="home"] .home-hero .hero-location strong {
+  color: var(--brand-black) !important;
+  text-shadow: none !important;
+}
+
+body[data-page="home"] .home-hero .hero-location > svg {
+  stroke: var(--brand-black) !important;
 }
