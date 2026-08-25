@@ -1,0 +1,22 @@
+{
+  "name": "lunch-box-ordering",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/*.test.mjs",
+    "convex:dev": "convex dev",
+    "convex:deploy": "convex deploy",
+    "public:build": "esbuild scripts/convex-browser-entry.js --bundle --minify --format=iife --target=es2020 --outfile=vendor/convex-client.js",
+    "admin:dev": "npm --prefix admin-portal run dev",
+    "admin:build": "npm --prefix admin-portal run build",
+    "perf:check": "npm run public:build && npm run admin:build && node scripts/check-performance.mjs"
+  },
+  "dependencies": {
+    "convex": "^1.31.5"
+  },
+  "devDependencies": {
+    "@types/node": "^26.2.0",
+    "typescript": "^7.0.2"
+  }
+}

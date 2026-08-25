@@ -24,12 +24,35 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v6
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            admin-portal/package-lock.json
+
+      - name: Install dependencies
+        run: |
+          npm ci
+          npm --prefix admin-portal ci
+
+      - name: Build public site and admin portal
+        env:
+          VITE_CONVEX_URL: https://uncommon-bullfrog-641.convex.cloud
+          VITE_PUBLIC_SITE_URL: https://lunchboxct.com/
+        run: |
+          npm run public:build
+          npm run admin:build
+          cp -R admin-portal/dist/. admin-portal/
+
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
         with:
           enablement: true
 
-      - name: Upload public site
+      - name: Upload complete site
         uses: actions/upload-pages-artifact@v4
         with:
           path: .

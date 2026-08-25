@@ -5253,11 +5253,8 @@ body[data-page="menu"] .modern-menu .add-button svg path {
 
 .menu-section-head,
 .category-nav {
-  width: min(1260px, 100%);
-}
-
-.menu-section-head {
-  max-width: 1260px;
+  width: min(1440px, 100%);
+  max-width: 1440px;
 }
 
 @media (min-width: 981px) {

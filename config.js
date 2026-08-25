@@ -1,9 +1,9 @@
 window.LUNCHBOX_CONFIG = {
   // Dedicated Lunch Box production deployment. This is separate from Patio.
   convexUrl: "https://uncommon-bullfrog-641.convex.cloud",
-  publicSiteUrl: "https://reimage-demo.github.io/lunchbox/",
+  publicSiteUrl: "https://lunchboxct.com/",
   paymentProvider: "square",
-  paymentEnabled: false,
+  paymentEnabled: true,
   defaultLocation: {
     locationName: "Lunch Box",
     address: "104 Baltimore St, Hartford, CT 06112",

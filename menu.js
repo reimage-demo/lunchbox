@@ -9,6 +9,8 @@ const customizeDialog = document.querySelector("#customizeDialog");
 const customizeForm = document.querySelector("#customizeForm");
 const customizeGroups = document.querySelector("#customizeGroups");
 const cartItemsElement = document.querySelector("#cartItems");
+const checkoutForm = document.querySelector("#checkoutForm");
+const checkoutSubmitButton = checkoutForm.querySelector('button[type="submit"]');
 const cart = new Map();
 const convexClient =
   window.LUNCHBOX_CONFIG?.convexUrl && window.LunchBoxConvex
@@ -23,6 +25,14 @@ let selectedTipPercent = 20;
 let appliedCoupon = null;
 let toastTimer;
 const subscriptions = [];
+const checkoutEnabled = Boolean(
+  window.LUNCHBOX_CONFIG?.paymentEnabled && convexClient,
+);
+
+checkoutSubmitButton.disabled = !checkoutEnabled;
+checkoutSubmitButton.textContent = checkoutEnabled
+  ? "Continue to secure Square checkout"
+  : "Square checkout coming soon";
 
 function showsStartingPrice(item) {
   if (typeof item.showsStartingPrice === "boolean")
@@ -469,15 +479,74 @@ function startLiveData() {
   );
 }
 
-document
-  .querySelector("#checkoutForm")
-  .addEventListener("submit", (event) => {
-    event.preventDefault();
-    const message = document.querySelector("#checkoutMessage");
+checkoutForm.addEventListener("input", () => {
+  checkoutRequestId = null;
+});
+
+checkoutForm.addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const message = document.querySelector("#checkoutMessage");
+  if (!checkoutEnabled) {
     message.className = "form-message error";
     message.textContent =
-      "Square checkout is not connected yet, so no order or payment was submitted.";
-  });
+      "Square checkout is not available yet, so no order or payment was submitted.";
+    return;
+  }
+  const orderContext = window.LunchBoxOrderContext;
+  if (!orderContext?.location?.orderingOpen) {
+    message.className = "form-message error";
+    message.textContent = "Online ordering is currently paused.";
+    return;
+  }
+  if (orderContext.pickupTiming === "scheduled" && !orderContext.scheduledFor) {
+    message.className = "form-message error";
+    message.textContent = "Choose a pickup time before continuing.";
+    return;
+  }
+
+  const formData = new FormData(checkoutForm);
+  checkoutRequestId ||= crypto.randomUUID();
+  checkoutSubmitButton.disabled = true;
+  message.className = "form-message";
+  message.textContent = "Opening secure Square checkout…";
+  try {
+    const result = await convexClient.action("square:createCheckout", {
+      clientRequestId: checkoutRequestId,
+      customerName: String(formData.get("customerName") || ""),
+      phone: String(formData.get("phone") || ""),
+      email: String(formData.get("email") || ""),
+      notes: String(formData.get("notes") || ""),
+      items: cartLines().map(({ item, quantity, selectedOptions }) => ({
+        menuItemId: item._id,
+        quantity,
+        selectedOptions,
+      })),
+      ...(appliedCoupon?.code ? { couponCode: appliedCoupon.code } : {}),
+      tip: selectedTip(),
+      fulfillmentType: "pickup",
+      pickupTiming: orderContext.pickupTiming,
+      ...(orderContext.pickupTiming === "scheduled"
+        ? { scheduledFor: orderContext.scheduledFor }
+        : {}),
+    });
+    const checkoutUrl = new URL(result.url);
+    const trustedCheckoutHosts = new Set([
+      "square.link",
+      "sandbox.square.link",
+      "checkout.square.site",
+      new URL(window.LUNCHBOX_CONFIG.publicSiteUrl).hostname,
+    ]);
+    if (checkoutUrl.protocol !== "https:" || !trustedCheckoutHosts.has(checkoutUrl.hostname))
+      throw new Error("Unexpected checkout destination.");
+    window.location.assign(checkoutUrl.toString());
+  } catch (error) {
+    console.error("Square checkout could not be started.", error);
+    message.className = "form-message error";
+    message.textContent =
+      "Secure checkout could not be started. Please check your order and try again.";
+    checkoutSubmitButton.disabled = false;
+  }
+});
 
 const paymentResult = new URLSearchParams(window.location.search).get(
   "payment",
