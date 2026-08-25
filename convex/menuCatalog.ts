@@ -54,6 +54,21 @@ const catalog: CatalogEntry[] = [
 
 const normalized = (value: string) => value.trim().toLocaleLowerCase();
 
+const generatedImageItemNames = new Set([
+  "soup",
+  "jerk pork",
+  "rice & peas meal",
+  "festival",
+  "fried plantain",
+  "strawberry pineapple",
+  "to the world",
+  "beetroot",
+  "irish moss",
+  "cucumber",
+  "carrot",
+  "other natural drink",
+]);
+
 // Adds only missing starter records and preserves everything already edited by
 // Lunch Box staff. Safe to run more than once on the new deployment.
 export const addMissingClientMenu = internalMutation({
@@ -199,5 +214,38 @@ export const applyBrandedMenuImages = internalMutation({
     }
 
     return { updated, matched: existingItems.length };
+  },
+});
+
+// Replaces only the placeholder/reused photos identified for this image pass.
+// Existing menu photography and all non-image item fields remain untouched.
+export const applyGeneratedMenuImages = internalMutation({
+  args: {},
+  handler: async (ctx) => {
+    const now = Date.now();
+    const existingItems = await ctx.db.query("menuItems").collect();
+    let updated = 0;
+
+    for (const item of existingItems) {
+      if (!generatedImageItemNames.has(normalized(item.name))) continue;
+      const entry = catalog.find(
+        (candidate) => normalized(candidate.name) === normalized(item.name),
+      );
+      if (!entry?.imageUrl) continue;
+      if (
+        item.imageUrl === entry.imageUrl &&
+        item.imageStorageId === undefined
+      )
+        continue;
+
+      await ctx.db.patch(item._id, {
+        imageUrl: entry.imageUrl,
+        imageStorageId: undefined,
+        updatedAt: now,
+      });
+      updated++;
+    }
+
+    return { updated, targeted: generatedImageItemNames.size };
   },
 });
