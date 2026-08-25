@@ -215,7 +215,9 @@ export const prepareCheckout = internalMutation({
         selectedAddOns,
       });
     }
-    if (!Number.isSafeInteger(subtotal) || subtotal < 1 || subtotal > 1_000_000)
+    // Complimentary demo items use the same trusted cart validation and order
+    // lifecycle, but skip Square when the final total is zero.
+    if (!Number.isSafeInteger(subtotal) || subtotal < 0 || subtotal > 1_000_000)
       throw new Error("The order total is outside the supported range.");
 
     const couponCode = args.couponCode?.trim().toUpperCase();
