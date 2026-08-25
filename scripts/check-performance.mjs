@@ -1,4 +1,4 @@
-import { readdirSync, readFileSync, statSync } from 'node:fs'
+import { readFileSync, statSync } from 'node:fs'
 import { gzipSync } from 'node:zlib'
 
 const kb = bytes => `${(bytes / 1024).toFixed(1)} KB`
@@ -9,9 +9,6 @@ const checks = [
   ['Transparent shared logo', 'assets/logo-transparent.webp', 80 * 1024, false],
   ['Public Convex client', 'vendor/convex-client.js', 30 * 1024, true]
 ]
-
-const adminBundle = readdirSync('admin-portal/dist/assets').find(file => /^admin-.*\.js$/.test(file))
-if (adminBundle) checks.push(['Admin JavaScript', `admin-portal/dist/assets/${adminBundle}`, 90 * 1024, true])
 
 let failed = false
 for (const [label, file, budget, compressed] of checks) {

@@ -8,9 +8,7 @@
     "convex:dev": "convex dev",
     "convex:deploy": "convex deploy",
     "public:build": "esbuild scripts/convex-browser-entry.js --bundle --minify --format=iife --target=es2020 --outfile=vendor/convex-client.js",
-    "admin:dev": "npm --prefix admin-portal run dev",
-    "admin:build": "npm --prefix admin-portal run build",
-    "perf:check": "npm run public:build && npm run admin:build && node scripts/check-performance.mjs"
+    "perf:check": "npm run public:build && node scripts/check-performance.mjs"
   },
   "dependencies": {
     "convex": "^1.31.5"

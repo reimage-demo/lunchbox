@@ -12,7 +12,7 @@ No Patio secrets, database connection or live customer data were copied. Lunch B
 - Pickup cart, item customization, tips and coupons
 - Square-hosted checkout with signed, idempotent payment webhooks
 - Live Convex menu, orders, order status and specials
-- Admin overview, orders, menu/category management, Catering Trays, pricing/options, coupons and specials/events
+- Separate admin portal for orders, menu/category management, Catering Trays, pricing/options, coupons and specials/events
 - Secure admin sessions, login throttling and manual unlock
 - Starter Lunch Box menu and catering data
 
@@ -24,7 +24,6 @@ Install dependencies:
 
 ```bash
 npm install
-npm --prefix admin-portal install
 ```
 
 The separate **Lunch Box** Convex project is already configured. To update its development deployment while working on backend functions:
@@ -33,7 +32,7 @@ The separate **Lunch Box** Convex project is already configured. To update its d
 npx convex dev
 ```
 
-The public `config.js`, local admin environment and production admin environment all target the Lunch Box production URL. Use `npx convex deploy` to publish backend changes to production.
+The public `config.js` targets the Lunch Box production URL. Use `npx convex deploy` to publish backend changes to production.
 
 Seed starter content:
 
@@ -41,14 +40,13 @@ Seed starter content:
 npx convex run seed:run
 ```
 
-Run the public site and admin during development:
+Run the public site during development:
 
 ```bash
 npx serve .
-npm run admin:dev
 ```
 
-The production admin portal is deployed independently from
+The admin source and production deployment live independently in
 `reimage-demo/ADMIN-Lunchbox` at `https://admin.lunchboxct.com/`. The public
 Lunch Box Pages workflow publishes only the customer-facing files.
 
@@ -56,7 +54,6 @@ Build and verify:
 
 ```bash
 npm run public:build
-npm run admin:build
 ```
 
 ## Admin credentials
