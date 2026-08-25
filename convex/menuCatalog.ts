@@ -257,10 +257,11 @@ export const applyGeneratedMenuImages = internalMutation({
   },
 });
 
-// Creates one reusable, food-only side choice and attaches it to every Main.
+// Creates one reusable, food-only side choice and attaches it to every Main
+// and Lunch Box meal.
 // Safe to run repeatedly: existing item choices are preserved and the side
 // group is updated in place when the current Sides catalog changes.
-export const ensureMainSideAddOns = internalMutation({
+export const ensureMealSideAddOns = internalMutation({
   args: {},
   handler: async (ctx) => {
     const now = Date.now();
@@ -311,27 +312,27 @@ export const ensureMainSideAddOns = internalMutation({
       });
     }
 
-    const mains = items.filter(
+    const meals = items.filter(
       (item) =>
-        normalized(item.category) === "mains" &&
+        ["mains", "lunch boxes"].includes(normalized(item.category)) &&
         item.isBottleService !== true,
     );
-    let mainsUpdated = 0;
-    for (const item of mains) {
+    let mealsUpdated = 0;
+    for (const item of meals) {
       const currentIds = item.optionGroupIds || [];
       if (currentIds.some((id) => String(id) === String(groupId))) continue;
       await ctx.db.patch(item._id, {
         optionGroupIds: [...currentIds, groupId],
         updatedAt: now,
       });
-      mainsUpdated++;
+      mealsUpdated++;
     }
 
     return {
       groupId,
       sides: sideItems.map((side) => side.name),
-      mains: mains.map((item) => item.name),
-      mainsUpdated,
+      meals: meals.map((item) => item.name),
+      mealsUpdated,
     };
   },
 });
