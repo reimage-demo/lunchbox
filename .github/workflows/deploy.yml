@@ -29,33 +29,28 @@ jobs:
         with:
           node-version: 22
           cache: npm
-          cache-dependency-path: |
-            package-lock.json
-            admin-portal/package-lock.json
 
       - name: Install dependencies
-        run: |
-          npm ci
-          npm --prefix admin-portal ci
+        run: npm ci
 
-      - name: Build public site and admin portal
-        env:
-          VITE_CONVEX_URL: https://uncommon-bullfrog-641.convex.cloud
-          VITE_PUBLIC_SITE_URL: https://lunchboxct.com/
+      - name: Build public site
+        run: npm run public:build
+
+      - name: Assemble public-only artifact
         run: |
-          npm run public:build
-          npm run admin:build
-          cp -R admin-portal/dist/. admin-portal/
+          mkdir _site
+          cp ./*.html ./*.js ./*.css ./*.txt ./*.xml _site/
+          cp -R assets vendor _site/
 
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
         with:
           enablement: true
 
-      - name: Upload complete site
+      - name: Upload public site
         uses: actions/upload-pages-artifact@v4
         with:
-          path: .
+          path: _site
 
       - name: Deploy to GitHub Pages
         id: deployment

@@ -48,6 +48,10 @@ npx serve .
 npm run admin:dev
 ```
 
+The production admin portal is deployed independently from
+`reimage-demo/ADMIN-Lunchbox` at `https://admin.lunchboxct.com/`. The public
+Lunch Box Pages workflow publishes only the customer-facing files.
+
 Build and verify:
 
 ```bash
@@ -145,4 +149,5 @@ fulfillment and tracking remain with the selected partner.
 - Confirm the exact Square reader model and choose the matching in-person SDK/API.
 - Connect only the Lunch Box Square location, then test payments and signed webhooks end to end before enabling checkout.
 - Review privacy, terms, refund and accessibility copy with the business owner/legal adviser.
-- Deploy Convex, publish the public root and deploy `admin-portal/dist/` after `npm run admin:build`.
+- Deploy Convex and publish the public root from this repository.
+- Deploy the admin source and its `dist/` Pages artifact from `reimage-demo/ADMIN-Lunchbox`.

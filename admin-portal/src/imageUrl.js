@@ -1,6 +1,6 @@
 const publicSiteUrl =
   import.meta.env.VITE_PUBLIC_SITE_URL ||
-  "https://reimage-demo.github.io/lunchbox/";
+  "https://lunchboxct.com/";
 
 export function resolveMenuImageUrl(value = "") {
   if (!value || /^(?:https?:|blob:|data:)/i.test(value)) return value;
