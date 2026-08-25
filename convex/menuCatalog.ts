@@ -54,6 +54,9 @@ const catalog: CatalogEntry[] = [
 
 const normalized = (value: string) => value.trim().toLocaleLowerCase();
 
+const optionId = (value: string) =>
+  `side-${normalized(value).replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "")}`;
+
 const generatedImageItemNames = new Set([
   "steamed fish lunch box",
   "callaloo",
@@ -251,5 +254,84 @@ export const applyGeneratedMenuImages = internalMutation({
     }
 
     return { updated, targeted: generatedImageItemNames.size };
+  },
+});
+
+// Creates one reusable, food-only side choice and attaches it to every Main.
+// Safe to run repeatedly: existing item choices are preserved and the side
+// group is updated in place when the current Sides catalog changes.
+export const ensureMainSideAddOns = internalMutation({
+  args: {},
+  handler: async (ctx) => {
+    const now = Date.now();
+    const items = await ctx.db.query("menuItems").collect();
+    const groups = await ctx.db.query("optionGroups").collect();
+    const sideItems = items
+      .filter(
+        (item) =>
+          normalized(item.category) === "sides" &&
+          normalized(item.name) !== "demo order (training only)",
+      )
+      .sort((left, right) => left.sortOrder - right.sortOrder);
+
+    if (!sideItems.length)
+      throw new Error("No side items are available to group.");
+
+    const groupName = "Would you like a side?";
+    const values = {
+      name: groupName,
+      description: "Choose one optional side to add to your meal.",
+      selectionMode: "single" as const,
+      minSelections: 0,
+      maxSelections: 1,
+      isAvailable: true,
+      sortOrder: 2,
+      options: sideItems.map((side, index) => ({
+        id: optionId(side.name),
+        name: side.name,
+        description: side.description,
+        price: side.price,
+        isAvailable: side.isAvailable,
+        sortOrder: index + 1,
+      })),
+    };
+
+    const existingGroup = groups.find(
+      (group) => normalized(group.name) === normalized(groupName),
+    );
+    let groupId: Id<"optionGroups">;
+    if (existingGroup) {
+      await ctx.db.patch(existingGroup._id, { ...values, updatedAt: now });
+      groupId = existingGroup._id;
+    } else {
+      groupId = await ctx.db.insert("optionGroups", {
+        ...values,
+        createdAt: now,
+        updatedAt: now,
+      });
+    }
+
+    const mains = items.filter(
+      (item) =>
+        normalized(item.category) === "mains" &&
+        item.isBottleService !== true,
+    );
+    let mainsUpdated = 0;
+    for (const item of mains) {
+      const currentIds = item.optionGroupIds || [];
+      if (currentIds.some((id) => String(id) === String(groupId))) continue;
+      await ctx.db.patch(item._id, {
+        optionGroupIds: [...currentIds, groupId],
+        updatedAt: now,
+      });
+      mainsUpdated++;
+    }
+
+    return {
+      groupId,
+      sides: sideItems.map((side) => side.name),
+      mains: mains.map((item) => item.name),
+      mainsUpdated,
+    };
   },
 });
