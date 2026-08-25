@@ -5353,6 +5353,13 @@ body[data-page="menu"] .modern-menu .add-button svg path {
 }
 #checkoutDialog .checkout-time-select {
   margin: 12px 0;
+  display: grid;
+  gap: 7px;
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .12em;
+  text-transform: uppercase;
   opacity: .45;
   transition: opacity 160ms ease;
 }
@@ -5361,13 +5368,28 @@ body[data-page="menu"] .modern-menu .add-button svg path {
 }
 #checkoutDialog select {
   width: 100%;
-  min-height: 46px;
-  padding: 10px 12px;
+  min-height: 50px;
+  padding: 11px 44px 11px 14px;
   border: 1px solid var(--line);
-  border-radius: 9px;
+  border-radius: 12px;
   color: var(--ink);
-  background: #fff;
+  background-color: #fff;
+  background-image: linear-gradient(45deg, transparent 50%, #111 50%), linear-gradient(135deg, #111 50%, transparent 50%);
+  background-position: calc(100% - 18px) 21px, calc(100% - 13px) 21px;
+  background-repeat: no-repeat;
+  background-size: 5px 5px, 5px 5px;
+  appearance: none;
   font: inherit;
+  font-size: 15px;
+  font-weight: 750;
+  letter-spacing: 0;
+  text-transform: none;
+  transition: border-color 160ms ease, box-shadow 160ms ease;
+}
+#checkoutDialog select:focus-visible {
+  border-color: #111;
+  outline: 0;
+  box-shadow: 0 0 0 3px rgba(242, 31, 37, .16);
 }
 #checkoutDialog .cart-fulfillment-summary {
   margin: 12px 0 0;

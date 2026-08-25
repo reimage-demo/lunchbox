@@ -87,14 +87,13 @@
     }).format(new Date(2020, 0, 1, hour, minute));
   }
 
-  function formatDate(value) {
-    if (!value) return "";
+  function formatPickupTime(value) {
+    const date = value instanceof Date ? value : new Date(value);
+    if (Number.isNaN(date.getTime())) return "";
     return new Intl.DateTimeFormat("en-US", {
-      weekday: "short",
-      month: "short",
-      day: "numeric",
-      timeZone: "UTC",
-    }).format(new Date(`${value}T12:00:00Z`));
+      hour: "numeric",
+      minute: "2-digit",
+    }).format(date);
   }
 
   function mapsUrl(location) {
@@ -135,13 +134,13 @@
     while (start <= end) {
       const option = document.createElement("option");
       option.value = start.toISOString();
-      option.textContent = `${formatDate(serviceDate)} at ${new Intl.DateTimeFormat("en-US", { hour: "numeric", minute: "2-digit" }).format(start)}`;
+      option.textContent = formatPickupTime(start);
       scheduleSelect.append(option);
       start = new Date(start.getTime() + 30 * 60000);
     }
     if (scheduleSelect.options.length > 1) {
       const stillAvailable = [...scheduleSelect.options].some(
-        (option) => option.value === scheduledFor,
+        (option) => option.value && option.value === scheduledFor,
       );
       if (!stillAvailable) scheduledFor = scheduleSelect.options[1].value;
       scheduleSelect.value = scheduledFor;
@@ -219,7 +218,7 @@
   function orderSummary() {
     const when =
       pickupTiming === "scheduled" && scheduledFor
-        ? new Intl.DateTimeFormat("en-US", { weekday: "short", hour: "numeric", minute: "2-digit" }).format(new Date(scheduledFor))
+        ? formatPickupTime(scheduledFor)
         : `Order now · about ${currentLocation?.prepTimeMinutes || 25} min`;
     return `${currentLocation?.locationName || defaultLocation.locationName} · ${when}`;
   }
