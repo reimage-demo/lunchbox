@@ -125,6 +125,16 @@ export default defineSchema({
     createdAt: v.number(),
     updatedAt: v.number(),
   }).index("by_key", ["key"]),
+  geocoderState: defineTable({
+    key: v.string(),
+    lastRequestAt: v.number(),
+    requestedCoordinateKey: v.string(),
+    cachedCoordinateKey: v.optional(v.string()),
+    cachedAddress: v.optional(v.string()),
+    cachedAttribution: v.optional(v.string()),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  }).index("by_key", ["key"]),
   orders: defineTable({
     orderNumber: v.string(),
     customerName: v.string(),

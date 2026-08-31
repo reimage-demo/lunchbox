@@ -126,8 +126,20 @@ summary, contact page and footers update from that record.
 The Truck Location screen displays the protected check-in URL to encode on an
 NFC tag kept inside the truck. The passive tag does not track the vehicle: it
 opens the authenticated check-in screen, and the operator's phone supplies the
-location after permission is granted. A fresh confirmation is required for
-each service date; an older stop is not presented as today's active location.
+location after permission is granted. A tag-opened check-in starts the location
+prompt automatically. The authenticated Convex action uses OpenStreetMap
+Nominatim to turn that one coordinate pair into an editable address; this
+low-volume, operator-triggered lookup must continue to follow Nominatim's usage
+policy and show its attribution. A fresh confirmation is required for each
+service date; an older stop is not presented as today's active location.
+
+To program the tag, open the production admin portal, choose **Truck Location**,
+and copy the NFC check-in link shown there. In an NFC-writing app, write that
+link as a single URL/URI record, lock the tag only after testing it, and attach
+it where the operator's phone can tap it. The operator signs in, allows location
+access, verifies the suggested address and map pin, then publishes. Geolocation
+requires HTTPS; `https://admin.lunchboxct.com/` provides the required secure
+context.
 
 DoorDash and Uber Eats storefront URLs can be added on the same screen. Until a
 URL is supplied, its delivery button is shown as coming soon. Delivery payment,

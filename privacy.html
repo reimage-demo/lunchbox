@@ -112,9 +112,11 @@
               tab and a sidebar preference in local storage. Admin sessions have
               a 30-minute inactivity limit and a 12-hour absolute limit. If a
               staff member chooses “Use this phone’s location,” the browser asks
-              for permission; coordinates are sent to Convex only when staff
-              save the location, and the published pickup coordinates and
-              address are then public.
+              for permission. The coordinates pass through the authenticated
+              Convex backend to OpenStreetMap’s Nominatim service to suggest a
+              street address. Staff can review or correct that suggestion. The
+              coordinates and address are saved and made public only after staff
+              confirm and publish the location.
             </p>
           </section>
           <section>
@@ -142,6 +144,7 @@
             <ul>
               <li><strong>GitHub Pages</strong> hosts the public website.</li>
               <li><strong>Convex</strong> provides the database, file storage, live data, and backend functions.</li>
+              <li><strong>OpenStreetMap Nominatim</strong> converts staff-authorized truck coordinates into an address during check-in.</li>
               <li><strong>Google Fonts</strong> supplies the typefaces requested by your browser.</li>
               <li><strong>Google Maps</strong> receives information only when you open a directions link.</li>
               <li><strong>DoorDash or Uber Eats</strong> receives information only if a storefront link is available and you choose to open it.</li>
