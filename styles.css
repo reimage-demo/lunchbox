@@ -6299,23 +6299,12 @@ body[data-page="home"] .home-hero .hero-location > svg {
   stroke: var(--brand-black) !important;
 }
 
-/* Readable menu prices and a taller, high-contrast cart control. */
+/* Readable menu prices and a taller mobile cart control. */
 body[data-page="menu"] .modern-menu .menu-card-price,
 .catering-card-copy > div > span {
   font-size: 20px;
   font-weight: 800;
   line-height: 1.3;
-}
-body[data-page="menu"] .site-header .header-cart,
-body[data-page="menu"] .site-header .header-cart:hover {
-  background: #202020 !important;
-  border-color: #444 !important;
-  color: #fff !important;
-}
-body[data-page="menu"] .site-header .header-cart .cart-preview-total { color: #fff !important; }
-body[data-page="menu"] .site-header .header-cart strong { background: #fff !important; color: #202020 !important; }
-@media (min-width: 981px) {
-  body[data-page="menu"] .site-header .header-cart { height: 55px; min-height: 55px; }
 }
 @media (max-width: 980px) {
   body[data-page="menu"] .site-header .header-cart { min-height: calc(65px + env(safe-area-inset-bottom)); }
