@@ -26,7 +26,7 @@
 
     grid.innerHTML = cateringItems
       .map((item) => {
-        const price = item.showsStartingPrice
+        const price = item.sizes?.length > 1 || item.showsStartingPrice
           ? `Starting at ${money(item.price)}`
           : money(item.price);
         const choices = (item.optionGroups || [])
@@ -38,6 +38,7 @@
             <div><p class="eyebrow dark">Catering</p><span>${price}</span></div>
             <h3>${escapeHtml(item.name)}</h3>
             <p>${escapeHtml(item.description)}</p>
+            ${item.sizes?.length ? `<p>${item.sizes.map((size) => `${escapeHtml(size.name)} ${money(size.price)}`).join(" · ")}</p>` : ""}
             ${choices ? `<ul>${choices}</ul>` : ""}
             <a class="text-link" href="contact.html">Ask about this tray</a>
           </div>

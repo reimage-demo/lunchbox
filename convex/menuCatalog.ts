@@ -11,6 +11,7 @@ type CatalogEntry = {
   featured?: boolean;
   showsStartingPrice?: boolean;
   optionGroup?: string;
+  sizes?: Array<{ name: "Small" | "Medium" | "Large"; price: number }>;
 };
 
 const categories = [
@@ -28,6 +29,8 @@ const publicImageUrl = (filename: string) =>
   `https://lunchboxct.com/assets/images/lunch-box/${filename}`;
 
 const catalog: CatalogEntry[] = [
+  { name: "Jerk Pork Lunch Box", category: "Lunch Boxes", price: 1800, description: "Smoky jerk pork with rice and peas, cabbage and plantain.", imageUrl: publicImageUrl("branded-jerk-pork-box.webp") },
+  { name: "Jerk Pork Catering Tray", category: "Catering Trays", price: 8500, description: "A generous tray of tender, smoky jerk pork for your whole group.", imageUrl: publicImageUrl("branded-jerk-pork-catering.webp"), catering: true },
   { name: "Jerk Chicken Lunch Box", category: "Lunch Boxes", price: 1800, description: "Smoky jerk chicken with rice, cabbage and plantain.", imageUrl: publicImageUrl("branded-jerk-chicken-box.webp"), featured: true },
   { name: "Curry Chicken Lunch Box", category: "Lunch Boxes", price: 1800, description: "Slow-cooked curry chicken served with rice and a seasonal side.", imageUrl: publicImageUrl("branded-curry-chicken-box.webp"), featured: true },
   { name: "Escovitch Fish Lunch Box", category: "Lunch Boxes", price: 2400, description: "Seasoned fish finished with bright pickled peppers and vegetables.", imageUrl: publicImageUrl("branded-escovitch-fish.webp") },
@@ -35,7 +38,7 @@ const catalog: CatalogEntry[] = [
   { name: "Soup", category: "Starters", price: 500, description: "A comforting bowl of today's freshly prepared soup.", imageUrl: publicImageUrl("branded-soup-v2.webp") },
   { name: "Jerk Chicken", category: "Mains", price: 1000, description: "Chicken seasoned with our bold jerk spices and cooked until tender.", imageUrl: publicImageUrl("branded-jerk-chicken.webp") },
   { name: "Jerk Pork", category: "Mains", price: 1000, description: "Tender pork seasoned with our bold jerk spices.", imageUrl: publicImageUrl("branded-jerk-pork-v2.webp") },
-  { name: "Fish", category: "Mains", price: 2500, description: "Freshly prepared fish in your choice of size.", imageUrl: publicImageUrl("branded-fish-v2.webp"), showsStartingPrice: true, optionGroup: "Choose your fish size" },
+  { name: "Fish", category: "Mains", price: 2500, description: "Freshly prepared fish in your choice of size.", imageUrl: publicImageUrl("branded-cooked-fish.webp"), showsStartingPrice: true, sizes: [{ name: "Small", price: 2500 }, { name: "Large", price: 3000 }] },
   { name: "Rice & Peas Meal", category: "Mains", price: 1500, description: "A hearty meal built around seasoned rice and peas.", imageUrl: publicImageUrl("branded-rice-and-peas-v2.webp") },
   { name: "Callaloo", category: "Sides", price: 700, description: "Tender greens cooked with fresh vegetables and island seasoning.", imageUrl: publicImageUrl("branded-callaloo-v2.webp") },
   { name: "Fried Dumplings", category: "Sides", price: 600, description: "Golden, crisp outside and soft inside. Three per order.", imageUrl: publicImageUrl("branded-fried-dumplings-v2.webp") },
@@ -165,6 +168,8 @@ export const addMissingClientMenu = internalMutation({
         category: entry.category,
         description: entry.description,
         price: entry.price,
+        ...(entry.sizes ? { sizes: entry.sizes } : {}),
+        ...(entry.name === "Soup" ? { sizes: [{ name: "Small" as const, price: 500 }, { name: "Large" as const, price: 1000 }] } : {}),
         imageUrl: entry.imageUrl,
         isAvailable: true,
         isFeatured: entry.featured ?? false,
@@ -334,5 +339,37 @@ export const ensureMealSideAddOns = internalMutation({
       meals: meals.map((item) => item.name),
       mealsUpdated,
     };
+  },
+});
+
+// Run once after deploying the size-pricing schema. Safe to rerun: preserves admin sizes.
+export const applySeptemberMenuUpdates = internalMutation({
+  args: {},
+  handler: async (ctx) => {
+    const rows = await ctx.db.query("menuItems").collect();
+    const now = Date.now();
+    for (const entry of catalog.filter((item) => ["Jerk Pork Lunch Box", "Jerk Pork Catering Tray"].includes(item.name))) {
+      if (!rows.some((item) => normalized(item.name) === normalized(entry.name))) {
+        await ctx.db.insert("menuItems", { name: entry.name, category: entry.category, description: entry.description, price: entry.price, imageUrl: entry.imageUrl, isAvailable: true, isBottleService: entry.catering ?? false, showsStartingPrice: false, sortOrder: rows.length + (entry.catering ? 2 : 1), addOns: [], createdAt: now, updatedAt: now });
+      }
+    }
+    const groups = await ctx.db.query("optionGroups").collect();
+    const fishSizeIds = new Set(groups.filter((group) => normalized(group.name) === "choose your fish size").map((group) => String(group._id)));
+    for (const item of rows) {
+      if (normalized(item.name) === "soup" && item.sizes === undefined) {
+        await ctx.db.patch(item._id, { price: 500, sizes: [{ name: "Small", price: 500 }, { name: "Large", price: 1000 }], updatedAt: now });
+      }
+      if (normalized(item.name) === "fish") {
+        const legacySizes = groups.find((group) => fishSizeIds.has(String(group._id)) && item.optionGroupIds?.includes(group._id));
+        const smallPrice = item.price + (legacySizes?.options.find((option) => option.id === "regular")?.price ?? 0);
+        const largePrice = item.price + (legacySizes?.options.find((option) => option.id === "large")?.price ?? 500);
+        await ctx.db.patch(item._id, { imageUrl: publicImageUrl("branded-cooked-fish.webp"), imageStorageId: undefined, ...(item.sizes === undefined ? { sizes: [{ name: "Small" as const, price: smallPrice }, { name: "Large" as const, price: largePrice }], optionGroupIds: (item.optionGroupIds || []).filter((id) => !fishSizeIds.has(String(id))) } : {}), updatedAt: now });
+      }
+    }
+    const location = await ctx.db.query("truckLocations").withIndex("by_key", (q) => q.eq("key", "current")).unique();
+    if (location && /890\s+boston/i.test(location.address)) {
+      await ctx.db.patch(location._id, { address: "104 Baltimore St, Hartford, CT 06112", latitude: undefined, longitude: undefined, locationNotes: undefined, lastConfirmedAt: undefined, updatedAt: now });
+    }
+    return { updated: true };
   },
 });

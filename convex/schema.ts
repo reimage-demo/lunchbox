@@ -33,6 +33,7 @@ export default defineSchema({
     category: v.string(),
     description: v.string(),
     price: v.number(),
+    sizes: v.optional(v.array(v.object({ name: v.union(v.literal("Small"), v.literal("Medium"), v.literal("Large")), price: v.number() }))),
     accent: v.optional(v.string()),
     isAvailable: v.boolean(),
     isFeatured: v.optional(v.boolean()),

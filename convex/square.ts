@@ -1,3 +1,4 @@
+import { sizePrice } from "./sizePricing.js";
 import { v } from "convex/values";
 import { action, internalMutation } from "./_generated/server";
 import { internal } from "./_generated/api";
@@ -6,6 +7,7 @@ import { publicCheckoutRedirect, SQUARE_API_VERSION } from "./squareShared.js";
 const cartItem = v.object({
   menuItemId: v.id("menuItems"),
   quantity: v.number(),
+  size: v.optional(v.string()),
   selectedOptions: v.array(
     v.object({
       groupId: v.id("optionGroups"),
@@ -205,7 +207,8 @@ export const prepareCheckout = internalMutation({
         }
       }
 
-      const unitPrice = item.price + optionTotal;
+      const unitPrice = sizePrice(item, submitted.size) + optionTotal;
+      if (submitted.size) selectedAddOns.unshift({ name: submitted.size, price: 0 });
       subtotal += unitPrice * submitted.quantity;
       trustedItems.push({
         menuItemId: item._id,

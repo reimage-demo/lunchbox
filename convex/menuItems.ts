@@ -1,5 +1,6 @@
 import { mutation, query } from "./_generated/server";
 import { v } from "convex/values";
+import { validateSizes } from "./sizePricing.js";
 import { requireAdmin } from "./auth";
 
 const addOns = v.array(
@@ -10,6 +11,7 @@ const fields = {
   category: v.string(),
   description: v.string(),
   price: v.number(),
+    sizes: v.optional(v.array(v.object({ name: v.union(v.literal("Small"), v.literal("Medium"), v.literal("Large")), price: v.number() }))),
   accent: v.optional(v.string()),
   imageUrl: v.optional(v.string()),
   imageStorageId: v.optional(v.id("_storage")),
@@ -131,6 +133,7 @@ export const create = mutation({
   args: { sessionToken: v.string(), ...fields },
   handler: async (ctx, { sessionToken, ...item }) => {
     await requireAdmin(ctx, sessionToken);
+    validateSizes(item.sizes);
     await validateOptionGroups(ctx, item.optionGroupIds);
     if (item.isDrinkOfNight) await clearOtherDrinkOfNight(ctx);
     const now = Date.now();
@@ -162,6 +165,7 @@ export const update = mutation({
     await requireAdmin(ctx, sessionToken);
     const existing = await ctx.db.get(id);
     if (!existing) throw new Error("Menu item not found.");
+    validateSizes(item.sizes);
     await validateOptionGroups(ctx, item.optionGroupIds);
     if (item.isDrinkOfNight) await clearOtherDrinkOfNight(ctx, id);
     const replacing = Boolean(

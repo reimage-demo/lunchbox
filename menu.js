@@ -35,6 +35,7 @@ checkoutSubmitButton.textContent = checkoutEnabled
   : "Square checkout coming soon";
 
 function showsStartingPrice(item) {
+  if (item.sizes?.length > 1) return true;
   if (typeof item.showsStartingPrice === "boolean")
     return item.showsStartingPrice;
   return item.isCustomDrink === true || item.isBottleService === true;
@@ -122,7 +123,7 @@ menuGrid.addEventListener("click", (event) => {
     (row) => String(row._id) === String(button.dataset.add),
   );
   if (!item) return;
-  item.optionGroups?.length
+  (item.optionGroups?.length || item.sizes?.length)
     ? openCustomizer(item)
     : addConfiguredItem(item, []);
 });
@@ -147,6 +148,10 @@ function cartLines() {
 function optionDetails(item, selectedOptions) {
   return selectedOptions
     .map((selection) => {
+      if (selection.groupId === "__size") {
+        const size = item.sizes?.find((entry) => entry.name === selection.optionId);
+        return size ? { ...selection, name: size.name, price: size.price - item.price } : null;
+      }
       const group = item.optionGroups?.find(
         (entry) => String(entry._id) === String(selection.groupId),
       );
@@ -206,7 +211,7 @@ function openCustomizer(item) {
   document.querySelector("#customizeTitle").textContent = item.name;
   document.querySelector("#customizeDescription").textContent =
     item.description;
-  customizeGroups.innerHTML = item.optionGroups
+  customizeGroups.innerHTML = (item.sizes?.length ? `<label class="size-selector">Size<select id="customizeSize" required>${item.sizes.map((size) => `<option value="${escapeHtml(size.name)}">${escapeHtml(size.name)} · ${money(size.price)}</option>`).join("")}</select></label>` : "") + (item.optionGroups || [])
     .map((group, groupIndex) => {
       const inputType = group.selectionMode === "single" ? "radio" : "checkbox";
       const requirement = group.minSelections
@@ -220,13 +225,14 @@ function openCustomizer(item) {
   customizeDialog.showModal();
 }
 function chosenOptions() {
-  return [...customizeGroups.querySelectorAll(".customize-group")].flatMap(
+  const sizeSelect = customizeGroups.querySelector("#customizeSize");
+  return [...(sizeSelect ? [{ groupId: "__size", optionId: sizeSelect.value }] : []), ...[...customizeGroups.querySelectorAll(".customize-group")].flatMap(
     (fieldset) =>
       [...fieldset.querySelectorAll("input:checked")].map((input) => ({
         groupId: fieldset.dataset.groupId,
         optionId: input.value,
       })),
-  );
+  )];
 }
 function updateCustomizeTotal() {
   const item = menu.find(
@@ -519,7 +525,8 @@ checkoutForm.addEventListener("submit", async (event) => {
       items: cartLines().map(({ item, quantity, selectedOptions }) => ({
         menuItemId: item._id,
         quantity,
-        selectedOptions,
+        size: selectedOptions.find((option) => option.groupId === "__size")?.optionId,
+        selectedOptions: selectedOptions.filter((option) => option.groupId !== "__size"),
       })),
       ...(appliedCoupon?.code ? { couponCode: appliedCoupon.code } : {}),
       tip: selectedTip(),

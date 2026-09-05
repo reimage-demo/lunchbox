@@ -113,7 +113,7 @@
       _id: "m8",
       name: "Jerk Chicken Catering Tray",
       category: "Catering Trays",
-      description: "A party-ready tray of chopped jerk chicken. Final serving size is set in the admin portal.",
+      description: "A party-ready tray of chopped jerk chicken.",
       price: 8500,
       imageUrl: "assets/images/lunch-box/branded-jerk-chicken.webp",
       isAvailable: true,
@@ -292,6 +292,15 @@
     },
   ];
 
+  fallbackMenu.find((item) => item.name === "Soup").sizes = [{ name: "Small", price: 500 }, { name: "Large", price: 1000 }];
+  const fish = fallbackMenu.find((item) => item.name === "Fish");
+  fish.sizes = [{ name: "Small", price: 2500 }, { name: "Large", price: 3000 }];
+  fish.optionGroups = [];
+  fallbackMenu.push(
+    { _id: "m24", name: "Jerk Pork Lunch Box", category: "Lunch Boxes", description: "Smoky jerk pork with rice and peas, cabbage and plantain.", price: 1800, isAvailable: true, categorySortOrder: 1, sortOrder: 5 },
+    { _id: "m25", name: "Jerk Pork Catering Tray", category: "Catering Trays", description: "A generous tray of tender, smoky jerk pork for your whole group.", price: 8500, isAvailable: true, isBottleService: true, categorySortOrder: 8, sortOrder: 10 }
+  );
+
   const fallbackEvents = [
     {
       _id: "e1",
@@ -306,6 +315,8 @@
   ];
 
   const brandedMenuImages = {
+    "Jerk Pork Lunch Box": "assets/images/lunch-box/branded-jerk-pork-box.webp",
+    "Jerk Pork Catering Tray": "assets/images/lunch-box/branded-jerk-pork-catering.webp",
     "Jerk Chicken Lunch Box": "assets/images/lunch-box/branded-jerk-chicken-box.webp",
     "Curry Chicken Lunch Box": "assets/images/lunch-box/branded-curry-chicken-box.webp",
     "Escovitch Fish Lunch Box": "assets/images/lunch-box/branded-escovitch-fish.webp",
@@ -315,7 +326,7 @@
     "Jerk Chicken": "assets/images/lunch-box/branded-jerk-chicken.webp",
     "Soup": "assets/images/lunch-box/branded-soup-v2.webp",
     "Jerk Pork": "assets/images/lunch-box/branded-jerk-pork-v2.webp",
-    "Fish": "assets/images/lunch-box/branded-fish-v2.webp",
+    "Fish": "assets/images/lunch-box/branded-cooked-fish.webp",
     "Rice & Peas Meal": "assets/images/lunch-box/branded-rice-and-peas-v2.webp",
     "Festival": "assets/images/lunch-box/branded-festival.webp",
     "Fried Plantain": "assets/images/lunch-box/branded-fried-plantain-v2.webp",
