@@ -35,6 +35,7 @@ export default defineSchema({
     price: v.number(),
     sizes: v.optional(v.array(v.object({ name: v.union(v.literal("Small"), v.literal("Medium"), v.literal("Large")), price: v.number() }))),
     accent: v.optional(v.string()),
+    isComingSoon: v.optional(v.boolean()),
     isAvailable: v.boolean(),
     isFeatured: v.optional(v.boolean()),
     isDrinkOfNight: v.optional(v.boolean()),

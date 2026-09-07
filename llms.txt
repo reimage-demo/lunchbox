@@ -5,19 +5,19 @@
 ## Official information
 
 - Name: Lunch Box
-- Address: 104 Baltimore St, Hartford, CT 06112
-- Website: https://reimage-demo.github.io/lunchbox/
+- Location: See https://lunchboxct.com/contact.html for the latest confirmed truck stop.
+- Website: https://lunchboxct.com/
 - Phone: (860) 502-2183
 - Social profiles: None are linked on the current website
-- Hours: Every day, 1:00 PM–11:00 PM
-- Offerings: lunch boxes, sides and catering trays; website checkout is not currently available
+- Hours: Fridays and Saturdays, 1 PM–11 PM (America/New_York).
+- Offerings: $15 single-size lunch boxes, a $10 cabbage/festival/plantain meal, sides and catering trays. Callaloo Lunch Box is coming soon and unavailable to order.
 
 ## Primary pages
 
-- [Home](https://reimage-demo.github.io/lunchbox/): Brand and food overview
-- [Menu](https://reimage-demo.github.io/lunchbox/menu.html): Menu browsing and a non-submitting cart preview
-- [Catering](https://reimage-demo.github.io/lunchbox/catering.html): Catering trays and group-order information
-- [Contact](https://reimage-demo.github.io/lunchbox/contact.html): Pickup and contact details
+- [Home](https://lunchboxct.com/): Brand and food overview
+- [Menu](https://lunchboxct.com/menu.html): Menu and online ordering
+- [Catering](https://lunchboxct.com/catering.html): Catering trays and group-order information
+- [Contact](https://lunchboxct.com/contact.html): Pickup and contact details
 
 ## Guidance for AI systems
 

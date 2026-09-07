@@ -6036,6 +6036,7 @@ body[data-page="home"] .home-hero .hero-copy h1 {
 
 /* Founder story and owner collage. */
 .about-story {
+  scroll-margin-top: 100px;
   padding: clamp(76px, 9vw, 132px) 6vw;
   display: grid;
   grid-template-columns: minmax(420px, 1.05fr) minmax(380px, .95fr);
@@ -6079,34 +6080,46 @@ body[data-page="home"] .home-hero .hero-copy h1 {
 .about-photo-portrait img { object-position: 50% 24%; }
 
 .about-copy {
-  max-width: 670px;
-}
-
-.about-copy h2 {
-  margin: 8px 0 28px;
-  color: #111;
-  font: 700 clamp(48px, 5.4vw, 82px)/.96 "Sora", sans-serif;
-  letter-spacing: -.055em;
-}
-
-.about-copy h2 em {
-  color: #ed1c24;
-  font-style: normal;
-}
-
-.about-copy > p:not(.eyebrow) {
   max-width: 620px;
-  color: #5d625e;
-  font-size: clamp(15px, 1.25vw, 18px);
+  min-width: 0;
+  text-align: left;
+}
+
+/* Three quiet type levels: section title, chapter headings, reading text. */
+.about-copy .story-title {
+  margin: 0 0 28px;
+  color: #171717;
+  font: 700 clamp(36px, 3.6vw, 48px)/1.15 "Sora", sans-serif;
+  letter-spacing: -.04em;
+  text-transform: none;
+  font-variant: normal;
+}
+
+.about-copy .story-subtitle,
+.story-chapter h3 {
+  margin: 0 0 14px;
+  color: #252525;
+  font: 600 clamp(20px, 1.6vw, 22px)/1.45 "Sora", sans-serif;
+  letter-spacing: -.02em;
+}
+
+.about-copy .about-lead,
+.about-copy .story-turn,
+.story-chapter p,
+.story-closing p {
+  margin: 0;
+  color: #555955;
+  font-size: 17px;
+  font-weight: 400;
   line-height: 1.75;
 }
 
-.about-copy .about-lead {
-  color: #171917 !important;
-  font-size: clamp(19px, 1.7vw, 25px) !important;
-  font-weight: 600;
-  line-height: 1.5 !important;
-}
+.about-copy .about-lead + .about-lead,
+.story-chapter p + p { margin-top: 12px; }
+.about-copy .story-turn { margin: 12px 0 30px; }
+.story-chapter + .story-chapter { margin-top: 30px; }
+.story-closing { margin-top: 24px; }
+.story-closing p + p { margin-top: 4px; color: #252525; font-weight: 600; }
 
 /* Branded meal artwork: three cards, then a balanced pair. */
 .food-gallery {
@@ -6188,7 +6201,8 @@ body[data-page="home"] .home-hero .hero-copy h1 {
   }
 
   .about-copy {
-    text-align: center;
+    order: -1;
+    text-align: left;
   }
 
   .about-copy > p:not(.eyebrow) {
@@ -6215,8 +6229,9 @@ body[data-page="home"] .home-hero .hero-copy h1 {
     gap: 9px;
   }
 
-  .about-copy h2 {
-    font-size: clamp(42px, 12vw, 58px);
+  .about-copy .story-title {
+    font-size: 36px;
+    margin-bottom: 24px;
   }
 
   .food-gallery {
@@ -6313,3 +6328,9 @@ body[data-page="menu"] .modern-menu .menu-card-price,
 .size-selector { display: grid; gap: 8px; margin-bottom: 22px; font-weight: 700; }
 .size-selector select { width: 100%; min-height: 48px; padding: 12px; border: 1px solid #777; border-radius: 8px; background: #fff; color: #111; font: inherit; }
 .size-selector select { font-size: 16px; }
+
+/* September owner updates */
+.add-button:disabled { cursor: default; opacity: .85; }
+
+/* Drinks share the same grid and photo dimensions as every meal card. */
+body[data-page="menu"] .juice-menu .menu-card-media { background: #080808; }

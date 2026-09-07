@@ -11,7 +11,7 @@
     startTime: config.defaultLocation?.startTime || "13:00",
     endTime: config.defaultLocation?.endTime || "23:00",
     hoursLabel:
-      config.defaultLocation?.hoursLabel || "Every day · 1 PM–11 PM",
+      config.defaultLocation?.hoursLabel || "Fridays & Saturdays · 1 PM–11 PM",
   };
   let currentLocation = null;
   let pickupTiming = "asap";
@@ -51,6 +51,7 @@
   const scheduleSelect = document.querySelector("#scheduledPickupTime");
   function localDate() {
     const parts = new Intl.DateTimeFormat("en-CA", {
+      timeZone: "America/New_York",
       year: "numeric",
       month: "2-digit",
       day: "2-digit",
@@ -67,10 +68,13 @@
   }
 
   function defaultOrderLocation() {
+    const next = new Date(`${localDate()}T12:00:00`);
+    while (![5, 6].includes(next.getDay())) next.setDate(next.getDate() + 1);
+    const serviceDate = dateKey(next);
     return {
       ...defaultLocation,
-      serviceDate: localDate(),
-      status: "open",
+      serviceDate,
+      status: serviceDate === localDate() ? "open" : "closed",
       orderingOpen: true,
       schedulingEnabled: true,
       prepTimeMinutes: 25,
@@ -125,6 +129,7 @@
     if (start > end && currentLocation.isDefaultSchedule) {
       const tomorrow = new Date();
       tomorrow.setDate(tomorrow.getDate() + 1);
+      while (![5, 6].includes(tomorrow.getDay())) tomorrow.setDate(tomorrow.getDate() + 1);
       serviceDate = dateKey(tomorrow);
       start = new Date(`${serviceDate}T00:00:00`);
       start.setHours(startHour, startMinute, 0, 0);
@@ -209,7 +214,7 @@
       element.textContent = location.address;
     });
     document.querySelectorAll("[data-truck-hours]").forEach((element) => {
-      element.textContent = `Every day · ${formatTime(location.startTime)}–${formatTime(location.endTime)}`;
+      element.textContent = `Fridays & Saturdays · ${formatTime(location.startTime)}–${formatTime(location.endTime)}`;
     });
     buildScheduleOptions();
     updateTiming();

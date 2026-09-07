@@ -9,7 +9,7 @@ window.LUNCHBOX_CONFIG = {
     address: "104 Baltimore St, Hartford, CT 06112",
     startTime: "13:00",
     endTime: "23:00",
-    hoursLabel: "Every day · 1 PM–11 PM",
+    hoursLabel: "Fridays & Saturdays · 1 PM–11 PM",
   },
   phone: "+18605022183",
   deliveryPartners: {

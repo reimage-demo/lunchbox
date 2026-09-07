@@ -171,7 +171,7 @@ export const prepareCheckout = internalMutation({
       totalQuantity += submitted.quantity;
       if (totalQuantity > 100) throw new Error("This order contains too many items.");
       const item = await ctx.db.get(submitted.menuItemId);
-      if (!item?.isAvailable) throw new Error("An item in your cart is no longer available.");
+      if (!item?.isAvailable || item.isComingSoon) throw new Error("An item in your cart is no longer available.");
       if (!Number.isInteger(item.price) || item.price < 0 || item.price > 100_000)
         throw new Error("An item in your cart has an invalid price.");
 
@@ -439,8 +439,13 @@ function cleanEmail(value: string) {
   return cleaned;
 }
 
-function validatePickup(args: any, location: any) {
+export function validatePickup(args: any, location: any) {
   const now = Date.now();
+  const pickupDate = args.pickupTiming === "asap" ? now : Date.parse(args.scheduledFor);
+  if (Number.isFinite(pickupDate)) {
+    const weekday = new Intl.DateTimeFormat("en-US", { timeZone: "America/New_York", weekday: "short" }).format(new Date(pickupDate));
+    if (!["Fri", "Sat"].includes(weekday)) throw new Error("Pickup is available on Fridays and Saturdays.");
+  }
   if (location && !location.orderingOpen)
     throw new Error("Online ordering is currently paused.");
   if (args.pickupTiming === "asap") {

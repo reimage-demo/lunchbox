@@ -1,6 +1,6 @@
 import { action, internalMutation, mutation, query } from "./_generated/server";
 import { api, internal } from "./_generated/api";
-import { v } from "convex/values";
+import { ConvexError, v } from "convex/values";
 import { requireAdmin } from "./auth";
 
 const CURRENT_LOCATION_KEY = "current";
@@ -27,7 +27,7 @@ function validateCoordinates(latitude: number, longitude: number) {
     longitude < -180 ||
     longitude > 180
   )
-    throw new Error("The phone returned invalid map coordinates.");
+    throw new ConvexError("The phone returned invalid map coordinates.");
 }
 
 function customerAddress(result: any) {
@@ -109,12 +109,12 @@ export const reverseGeocode = action({
       },
     );
     if (!response.ok)
-      throw new Error("The address service is unavailable. Enter the address manually.");
+      throw new ConvexError("The address service is unavailable. Enter the address manually.");
 
     const result = await response.json();
     const address = customerAddress(result);
     if (!address)
-      throw new Error("No street address was found for this pin. Enter the address manually.");
+      throw new ConvexError("No street address was found for this pin. Enter the address manually.");
 
     const lookup = {
       address,
@@ -146,7 +146,7 @@ export const reserveGeocoderLookup = internalMutation({
         cachedAttribution: state.cachedAttribution,
       };
     if (state && now - state.lastRequestAt < GEOCODER_MIN_INTERVAL_MS)
-      throw new Error("Wait a moment before looking up the address again.");
+      throw new ConvexError("Wait a moment before looking up the address again.");
 
     const values = {
       lastRequestAt: now,
@@ -251,19 +251,19 @@ export const saveCurrent = mutation({
     await requireAdmin(ctx, sessionToken);
     const locationName = values.locationName.trim();
     const address = values.address.trim();
-    if (!locationName) throw new Error("Enter a location name.");
-    if (!address) throw new Error("Enter the pickup address.");
+    if (!locationName) throw new ConvexError("Enter a location name.");
+    if (!address) throw new ConvexError("Enter the pickup address.");
     if (!/^\d{4}-\d{2}-\d{2}$/.test(values.serviceDate))
-      throw new Error("Choose a valid service date.");
+      throw new ConvexError("Choose a valid service date.");
     if (!Number.isFinite(values.prepTimeMinutes) || values.prepTimeMinutes < 5)
-      throw new Error("Prep time must be at least 5 minutes.");
+      throw new ConvexError("Prep time must be at least 5 minutes.");
     if ((values.latitude === undefined) !== (values.longitude === undefined))
-      throw new Error("The map coordinates are invalid.");
+      throw new ConvexError("The map coordinates are invalid.");
     if (values.latitude !== undefined && values.longitude !== undefined) {
       try {
         validateCoordinates(values.latitude, values.longitude);
       } catch {
-        throw new Error("The map coordinates are invalid.");
+        throw new ConvexError("The map coordinates are invalid.");
       }
     }
     for (const [label, url] of [
@@ -275,7 +275,7 @@ export const saveCurrent = mutation({
           const parsed = new URL(url);
           if (parsed.protocol !== "https:") throw new Error();
         } catch {
-          throw new Error(`${label} must use a complete https:// link.`);
+          throw new ConvexError(`${label} must use a complete https:// link.`);
         }
       }
     }

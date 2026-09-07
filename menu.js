@@ -43,7 +43,7 @@ function showsStartingPrice(item) {
 
 function renderMenu() {
   const available = menu
-    .filter((item) => item.isAvailable)
+    .filter((item) => (item.isAvailable || item.isComingSoon) && !["Mains", "Build Your Own"].includes(item.category))
     .sort((left, right) => {
       const leftRank = left.isDrinkOfNight ? 0 : left.isFeatured ? 1 : 2;
       const rightRank = right.isDrinkOfNight ? 0 : right.isFeatured ? 1 : 2;
@@ -67,7 +67,9 @@ function renderMenu() {
     )
     .join("");
   const card = (item) => {
-    const badge = item.isDrinkOfNight
+    const badge = item.isComingSoon
+        ? '<span class="menu-card-badge">Coming soon</span>'
+        : item.isDrinkOfNight
         ? '<span class="menu-card-badge night-badge">Featured today</span>'
         : item.isCustomDrink
           ? '<span class="menu-card-badge custom-badge">Build Your Own</span>'
@@ -78,7 +80,7 @@ function renderMenu() {
       ? `Starting at ${money(item.price)}`
       : money(item.price);
     const actionLabel = "Add";
-    const addButton = `<button type="button" class="add-button" data-add="${item._id}" aria-label="${actionLabel} ${escapeHtml(item.name)}"><span>${actionLabel}</span><b aria-hidden="true"><svg viewBox="0 0 20 20" focusable="false"><path d="M10 4v12M4 10h12" /></svg></b></button>`;
+    const addButton = item.isComingSoon ? '<button type="button" class="add-button" disabled>Coming soon</button>' : `<button type="button" class="add-button" data-add="${item._id}" aria-label="${actionLabel} ${escapeHtml(item.name)}"><span>${actionLabel}</span><b aria-hidden="true"><svg viewBox="0 0 20 20" focusable="false"><path d="M10 4v12M4 10h12" /></svg></b></button>`;
     const media = item.imageUrl
       ? `<div class="menu-card-media">${badge}<img src="${escapeHtml(resolveAssetUrl(item.imageUrl))}" width="800" height="600" loading="lazy" decoding="async" alt="${escapeHtml(item.name)}">${addButton}</div>`
       : "";
@@ -91,7 +93,7 @@ function renderMenu() {
           (item) => (item.category || "Menu") === activeCategory,
         );
   const categorySection = (category, items) =>
-    `<section class="menu-category" data-menu-category="${escapeHtml(category)}"><div class="menu-category-heading"><div><p>Explore the menu</p><h2>${escapeHtml(category)}</h2></div><span>${items.length} item${items.length === 1 ? "" : "s"}</span></div><div class="menu-items-grid">${items.map(card).join("")}</div></section>`;
+    `<section class="menu-category${category === "Natural Drinks" ? " juice-menu" : ""}" data-menu-category="${escapeHtml(category)}"><div class="menu-category-heading"><div><p>Explore the menu</p><h2>${escapeHtml(category)}</h2></div><span>${items.length} item${items.length === 1 ? "" : "s"}</span></div><div class="menu-items-grid">${items.map(card).join("")}</div></section>`;
   const regularMarkup = visibleRegular.length
     ? activeCategory === "All"
       ? categories.map((category) => {
@@ -122,7 +124,7 @@ menuGrid.addEventListener("click", (event) => {
   const item = menu.find(
     (row) => String(row._id) === String(button.dataset.add),
   );
-  if (!item) return;
+  if (!item || !item.isAvailable || item.isComingSoon) return;
   (item.optionGroups?.length || item.sizes?.length)
     ? openCustomizer(item)
     : addConfiguredItem(item, []);

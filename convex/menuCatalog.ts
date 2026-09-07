@@ -9,6 +9,8 @@ type CatalogEntry = {
   imageUrl?: string;
   catering?: boolean;
   featured?: boolean;
+  comingSoon?: boolean;
+  unpublished?: boolean;
   showsStartingPrice?: boolean;
   optionGroup?: string;
   sizes?: Array<{ name: "Small" | "Medium" | "Large"; price: number }>;
@@ -16,9 +18,7 @@ type CatalogEntry = {
 
 const categories = [
   { name: "Lunch Boxes", kind: "menu" as const },
-  { name: "Build Your Own", kind: "menu" as const },
   { name: "Starters", kind: "menu" as const },
-  { name: "Mains", kind: "menu" as const },
   { name: "Sides", kind: "menu" as const },
   { name: "Natural Drinks", kind: "menu" as const },
   { name: "Drinks", kind: "menu" as const },
@@ -28,31 +28,174 @@ const categories = [
 const publicImageUrl = (filename: string) =>
   `https://lunchboxct.com/assets/images/lunch-box/${filename}`;
 
-const catalog: CatalogEntry[] = [
-  { name: "Jerk Pork Lunch Box", category: "Lunch Boxes", price: 1800, description: "Smoky jerk pork with rice and peas, cabbage and plantain.", imageUrl: publicImageUrl("branded-jerk-pork-box.webp") },
-  { name: "Jerk Pork Catering Tray", category: "Catering Trays", price: 8500, description: "A generous tray of tender, smoky jerk pork for your whole group.", imageUrl: publicImageUrl("branded-jerk-pork-catering.webp"), catering: true },
-  { name: "Jerk Chicken Lunch Box", category: "Lunch Boxes", price: 1800, description: "Smoky jerk chicken with rice, cabbage and plantain.", imageUrl: publicImageUrl("branded-jerk-chicken-box.webp"), featured: true },
-  { name: "Curry Chicken Lunch Box", category: "Lunch Boxes", price: 1800, description: "Slow-cooked curry chicken served with rice and a seasonal side.", imageUrl: publicImageUrl("branded-curry-chicken-box.webp"), featured: true },
-  { name: "Escovitch Fish Lunch Box", category: "Lunch Boxes", price: 2400, description: "Seasoned fish finished with bright pickled peppers and vegetables.", imageUrl: publicImageUrl("branded-escovitch-fish.webp") },
-  { name: "Steamed Fish Lunch Box", category: "Lunch Boxes", price: 2600, description: "Whole fish steamed with herbs, peppers and garden vegetables.", imageUrl: publicImageUrl("branded-steamed-fish-box-v2.webp") },
-  { name: "Soup", category: "Starters", price: 500, description: "A comforting bowl of today's freshly prepared soup.", imageUrl: publicImageUrl("branded-soup-v2.webp") },
-  { name: "Jerk Chicken", category: "Mains", price: 1000, description: "Chicken seasoned with our bold jerk spices and cooked until tender.", imageUrl: publicImageUrl("branded-jerk-chicken.webp") },
-  { name: "Jerk Pork", category: "Mains", price: 1000, description: "Tender pork seasoned with our bold jerk spices.", imageUrl: publicImageUrl("branded-jerk-pork-v2.webp") },
-  { name: "Fish", category: "Mains", price: 2500, description: "Freshly prepared fish in your choice of size.", imageUrl: publicImageUrl("branded-cooked-fish.webp"), showsStartingPrice: true, sizes: [{ name: "Small", price: 2500 }, { name: "Large", price: 3000 }] },
-  { name: "Rice & Peas Meal", category: "Mains", price: 1500, description: "A hearty meal built around seasoned rice and peas.", imageUrl: publicImageUrl("branded-rice-and-peas-v2.webp") },
-  { name: "Callaloo", category: "Sides", price: 700, description: "Tender greens cooked with fresh vegetables and island seasoning.", imageUrl: publicImageUrl("branded-callaloo-v2.webp") },
-  { name: "Fried Dumplings", category: "Sides", price: 600, description: "Golden, crisp outside and soft inside. Three per order.", imageUrl: publicImageUrl("branded-fried-dumplings-v2.webp") },
-  { name: "Festival", category: "Sides", price: 500, description: "Sweet Jamaican fried dough with a golden outside and soft center.", imageUrl: publicImageUrl("branded-festival.webp") },
-  { name: "Fried Plantain", category: "Sides", price: 500, description: "Sweet ripe plantain fried until caramelized.", imageUrl: publicImageUrl("branded-fried-plantain-v2.webp") },
-  { name: "Strawberry Pineapple", category: "Natural Drinks", price: 1000, description: "A refreshing natural strawberry and pineapple drink.", imageUrl: publicImageUrl("branded-strawberry-pineapple-v2.webp") },
-  { name: "To The World", category: "Natural Drinks", price: 1000, description: "The house natural drink blend featured on our menu.", imageUrl: publicImageUrl("branded-to-the-world-v2.webp") },
-  { name: "Beetroot", category: "Natural Drinks", price: 1000, description: "A vibrant natural beetroot drink.", imageUrl: publicImageUrl("branded-beetroot-v2.webp") },
-  { name: "Irish Moss", category: "Natural Drinks", price: 1000, description: "A rich, creamy Caribbean-style Irish moss drink.", imageUrl: publicImageUrl("branded-irish-moss-v2.webp") },
-  { name: "Cucumber", category: "Natural Drinks", price: 1000, description: "A cool and refreshing natural cucumber drink.", imageUrl: publicImageUrl("branded-cucumber-v2.webp") },
-  { name: "Carrot", category: "Natural Drinks", price: 1000, description: "A smooth natural carrot drink with island flavor.", imageUrl: publicImageUrl("branded-carrot-v2.webp") },
-  { name: "Other Natural Drink", category: "Natural Drinks", price: 1000, description: "Ask about today's additional natural drink flavor.", imageUrl: publicImageUrl("branded-other-natural-v2.webp") },
-  { name: "Jerk Chicken Catering Tray", category: "Catering Trays", price: 8500, description: "A party-ready tray of chopped jerk chicken.", imageUrl: publicImageUrl("branded-jerk-chicken.webp"), catering: true },
-  { name: "Fish & Vegetable Catering Tray", category: "Catering Trays", price: 12000, description: "Seasoned fish with peppers and vegetables for group orders.", imageUrl: publicImageUrl("branded-escovitch-fish.webp"), catering: true },
+export const catalog: CatalogEntry[] = [
+  {
+    "name": "Jerk Chicken Lunch Box",
+    "category": "Lunch Boxes",
+    "price": 1500,
+    "description": "Smoky jerk chicken with rice and peas and your choice of cabbage or fried plantain.",
+    "imageUrl": "https://lunchboxct.com/assets/images/lunch-box/branded-jerk-chicken-box.webp",
+    "featured": true
+  },
+  {
+    "name": "Curry Chicken Lunch Box",
+    "category": "Lunch Boxes",
+    "price": 1500,
+    "description": "Slow-cooked curry chicken with rice and peas and your choice of cabbage or fried plantain.",
+    "imageUrl": "https://lunchboxct.com/assets/images/lunch-box/branded-curry-chicken-box.webp",
+    "featured": true
+  },
+  {
+    "name": "Escovitch Fish Lunch Box",
+    "category": "Lunch Boxes",
+    "price": 1500,
+    "description": "Escovitch fish with bright pickled peppers, rice and peas and your choice of cabbage or fried plantain.",
+    "imageUrl": "https://lunchboxct.com/assets/images/lunch-box/branded-escovitch-fish.webp"
+  },
+  {
+    "name": "Steamed Fish Lunch Box",
+    "category": "Lunch Boxes",
+    "price": 1500,
+    "description": "Fish steamed with herbs and vegetables, served with rice and peas and your choice of cabbage or fried plantain.",
+    "imageUrl": "https://lunchboxct.com/assets/images/lunch-box/branded-steamed-fish-box-v2.webp"
+  },
+  {
+    "name": "Callaloo Lunch Box",
+    "category": "Lunch Boxes",
+    "price": 1500,
+    "description": "Callaloo with seasoned cabbage, rice and peas, and fried plantain. Coming soon.",
+    "unpublished": true
+  },
+  {
+    "name": "Fried Dumplings",
+    "category": "Sides",
+    "price": 600,
+    "description": "Golden, crisp outside and soft inside. Three per order.",
+    "imageUrl": "https://lunchboxct.com/assets/images/lunch-box/branded-fried-dumplings-v3.webp"
+  },
+  {
+    "name": "Jerk Chicken Catering Tray",
+    "category": "Catering Trays",
+    "price": 8500,
+    "description": "A party-ready tray of chopped jerk chicken.",
+    "imageUrl": "https://lunchboxct.com/assets/images/lunch-box/branded-jerk-chicken.webp",
+    "catering": true
+  },
+  {
+    "name": "Fish & Vegetable Catering Tray",
+    "category": "Catering Trays",
+    "price": 12000,
+    "description": "Seasoned fish with peppers and vegetables for group orders.",
+    "imageUrl": "https://lunchboxct.com/assets/images/lunch-box/branded-escovitch-fish.webp",
+    "catering": true
+  },
+  {
+    "name": "Soup",
+    "category": "Starters",
+    "price": 500,
+    "description": "A hearty bowl of rich Jamaican soup, packed with vegetables, ground provisions, and dumplings.",
+    "imageUrl": "https://lunchboxct.com/assets/images/lunch-box/branded-soup-v3.webp",
+    "sizes": [
+      {
+        "name": "Small",
+        "price": 500
+      },
+      {
+        "name": "Large",
+        "price": 1000
+      }
+    ]
+  },
+  {
+    "name": "Festival",
+    "category": "Sides",
+    "price": 500,
+    "description": "Sweet Jamaican fried dough with a golden outside and soft center.",
+    "imageUrl": "https://lunchboxct.com/assets/images/lunch-box/branded-festival.webp"
+  },
+  {
+    "name": "Fried Plantain",
+    "category": "Sides",
+    "price": 500,
+    "description": "Sweet ripe plantain fried until caramelized.",
+    "imageUrl": "https://lunchboxct.com/assets/images/lunch-box/branded-fried-plantain-v2.webp"
+  },
+  {
+    "name": "Strawberry Pineapple",
+    "category": "Natural Drinks",
+    "price": 1000,
+    "description": "A refreshing natural strawberry and pineapple drink.",
+    "imageUrl": "https://lunchboxct.com/assets/images/lunch-box/drink-strawberry-pineapple-v4.jpg"
+  },
+  {
+    "name": "To The World",
+    "category": "Natural Drinks",
+    "price": 1000,
+    "description": "The house natural drink blend featured on our menu.",
+    "imageUrl": "https://lunchboxct.com/assets/images/lunch-box/drink-to-the-world-v4.jpg"
+  },
+  {
+    "name": "Beetroot",
+    "category": "Natural Drinks",
+    "price": 1000,
+    "description": "A vibrant natural beetroot drink.",
+    "imageUrl": "https://lunchboxct.com/assets/images/lunch-box/drink-beetroot-v4.jpg"
+  },
+  {
+    "name": "Irish Moss",
+    "category": "Natural Drinks",
+    "price": 1000,
+    "description": "A rich, creamy Caribbean-style Irish moss drink.",
+    "imageUrl": "https://lunchboxct.com/assets/images/lunch-box/drink-irish-moss-v4.jpg"
+  },
+  {
+    "name": "Cucumber",
+    "category": "Natural Drinks",
+    "price": 1000,
+    "description": "A cool and refreshing natural cucumber drink.",
+    "imageUrl": "https://lunchboxct.com/assets/images/lunch-box/drink-cucumber-v4.jpg"
+  },
+  {
+    "name": "Carrot",
+    "category": "Natural Drinks",
+    "price": 1000,
+    "description": "A smooth natural carrot drink with island flavor.",
+    "imageUrl": "https://lunchboxct.com/assets/images/lunch-box/drink-carrot-v4.jpg"
+  },
+  {
+    "name": "Other Natural Drink",
+    "category": "Natural Drinks",
+    "price": 1000,
+    "description": "Ask about today's additional natural drink flavor.",
+    "imageUrl": "https://lunchboxct.com/assets/images/lunch-box/drink-other-natural-v4.jpg"
+  },
+  {
+    "name": "Jerk Pork Lunch Box",
+    "category": "Lunch Boxes",
+    "price": 1500,
+    "description": "Smoky jerk pork with rice and peas and your choice of cabbage or fried plantain.",
+    "imageUrl": "https://lunchboxct.com/assets/images/lunch-box/branded-jerk-pork-box.webp"
+  },
+  {
+    "name": "Jerk Pork Catering Tray",
+    "category": "Catering Trays",
+    "price": 8500,
+    "description": "A generous tray of tender, smoky jerk pork for your whole group.",
+    "imageUrl": "https://lunchboxct.com/assets/images/lunch-box/branded-jerk-pork-catering.webp",
+    "catering": true
+  },
+  {
+    "name": "Vegetarian Lunchbox",
+    "category": "Lunch Boxes",
+    "price": 1500,
+    "description": "A hearty vegetarian meal of seasoned cabbage, rice and peas, and fried plantain."
+  },
+  {
+    "name": "Cabbage & Festival Meal",
+    "category": "Sides",
+    "price": 1000,
+    "description": "Seasoned cabbage, golden Jamaican festival, and fried plantain. A generous vegetarian meal."
+  }
 ];
 
 const normalized = (value: string) => value.trim().toLocaleLowerCase();
@@ -171,7 +314,8 @@ export const addMissingClientMenu = internalMutation({
         ...(entry.sizes ? { sizes: entry.sizes } : {}),
         ...(entry.name === "Soup" ? { sizes: [{ name: "Small" as const, price: 500 }, { name: "Large" as const, price: 1000 }] } : {}),
         imageUrl: entry.imageUrl,
-        isAvailable: true,
+        isAvailable: !(entry.comingSoon || entry.unpublished),
+        isComingSoon: entry.comingSoon ?? false,
         isFeatured: entry.featured ?? false,
         isDrinkOfNight: false,
         isCustomDrink: false,
@@ -372,4 +516,68 @@ export const applySeptemberMenuUpdates = internalMutation({
     }
     return { updated: true };
   },
+});
+
+// Applies the owner's September 6 menu. Retires records without deleting order history.
+export async function applyLunchBoxFocus(ctx: any) {
+  const now = Date.now();
+  const rows = await ctx.db.query("menuItems").collect();
+  const groups = await ctx.db.query("optionGroups").collect();
+  const sideValues = {
+    name: "Choose your included side",
+    description: "Rice and peas come with your box. Choose one extra side.",
+    selectionMode: "single" as const, minSelections: 1, maxSelections: 1,
+    isAvailable: true, sortOrder: 1,
+    options: [
+      { id: "cabbage", name: "Cabbage", description: "", price: 0, isAvailable: true, sortOrder: 1 },
+      { id: "plantain", name: "Fried plantain", description: "", price: 0, isAvailable: true, sortOrder: 2 },
+    ],
+    updatedAt: now,
+  };
+  const existingGroup = groups.find((group: any) => group.name === sideValues.name);
+  const groupId = existingGroup?._id ?? await ctx.db.insert("optionGroups", { ...sideValues, createdAt: now });
+  if (existingGroup) await ctx.db.patch(groupId, sideValues);
+  const fixedVeggie = new Set(["Vegetarian Lunchbox", "Callaloo Lunch Box", "Cabbage & Festival Meal"]);
+  for (const row of rows) {
+    if (["mains", "build your own"].includes(normalized(row.category)) || normalized(row.name) === "callaloo") {
+      await ctx.db.patch(row._id, { isAvailable: false, isComingSoon: false, updatedAt: now });
+    } else if (normalized(row.category) === "lunch boxes" && !row.isBottleService) {
+      await ctx.db.patch(row._id, {
+        price: 1500,
+        sizes: [], showsStartingPrice: false, isCustomDrink: false,
+        optionGroupIds: fixedVeggie.has(row.name) ? [] : [groupId], addOns: [], updatedAt: now,
+      });
+    }
+  }
+  for (const entry of catalog.filter((entry) => entry.category === "Lunch Boxes" || ["Soup", "Fried Dumplings", "Cabbage & Festival Meal"].includes(entry.name))) {
+    const existing = rows.find((row: any) => (normalized(row.name) === normalized(entry.name) || (entry.name === "Vegetarian Lunchbox" && ["vegetarian meal", "veggie lunch box"].includes(normalized(row.name)))));
+    const values = {
+      name: entry.name, category: entry.category, description: entry.description,
+      ...(entry.name === "Cabbage & Festival Meal" ? { price: 1000, sizes: [], optionGroupIds: [], addOns: [], showsStartingPrice: false } : {}),
+      ...(entry.category === "Lunch Boxes" ? {
+        price: entry.price, sizes: [], showsStartingPrice: false, isCustomDrink: false,
+        optionGroupIds: fixedVeggie.has(entry.name) ? [] : [groupId], addOns: [],
+        isComingSoon: entry.comingSoon ?? false,
+        ...((entry.comingSoon || entry.unpublished) ? { isAvailable: false } : entry.name === "Vegetarian Lunchbox" ? { isAvailable: true } : {}),
+      } : {}),
+      ...(entry.imageUrl && !existing?.imageStorageId ? { imageUrl: entry.imageUrl } : {}), updatedAt: now,
+    };
+    if (existing) await ctx.db.patch(existing._id, values);
+    else await ctx.db.insert("menuItems", {
+      price: entry.price, isAvailable: !(entry.comingSoon || entry.unpublished), sortOrder: catalog.indexOf(entry) + 1,
+      addOns: [], createdAt: now, ...values,
+    });
+  }
+  const categories = await ctx.db.query("menuCategories").collect();
+  for (const category of categories) {
+    if (category.kind === "menu" && ["mains", "build your own"].includes(normalized(category.name)))
+      await ctx.db.patch(category._id, { isAvailable: false, updatedAt: now });
+    if (category.kind === "menu" && normalized(category.name) === "lunch boxes")
+      await ctx.db.patch(category._id, { isAvailable: true, sortOrder: 1, updatedAt: now });
+  }
+  return { updated: true, includedSideGroupId: groupId };
+}
+
+export const applyLunchBoxFocusUpdates = internalMutation({
+  args: {}, handler: applyLunchBoxFocus,
 });

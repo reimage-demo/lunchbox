@@ -13,6 +13,7 @@ const fields = {
   price: v.number(),
     sizes: v.optional(v.array(v.object({ name: v.union(v.literal("Small"), v.literal("Medium"), v.literal("Large")), price: v.number() }))),
   accent: v.optional(v.string()),
+  isComingSoon: v.optional(v.boolean()),
   imageUrl: v.optional(v.string()),
   imageStorageId: v.optional(v.id("_storage")),
   isAvailable: v.boolean(),
@@ -61,7 +62,6 @@ export const listAvailable = query({
   handler: async (ctx) => {
     const rows = await ctx.db
       .query("menuItems")
-      .withIndex("by_available_sort", (q) => q.eq("isAvailable", true))
       .collect();
     rows.sort(featuredFirst);
     const groups = await ctx.db
@@ -91,6 +91,7 @@ export const listAvailable = query({
     return Promise.all(
       rows
         .filter((row) => {
+          if (!row.isAvailable && !row.isComingSoon) return false;
           const category = categoryMap.get(
             `${row.isBottleService ? "bottle" : "menu"}:${row.category.toLocaleLowerCase()}`,
           );
@@ -134,6 +135,8 @@ export const create = mutation({
   handler: async (ctx, { sessionToken, ...item }) => {
     await requireAdmin(ctx, sessionToken);
     validateSizes(item.sizes);
+    if (item.category.trim().toLowerCase() === "lunch boxes" && item.sizes?.length)
+      throw new Error("Lunch boxes have one standard portion. Remove size prices.");
     await validateOptionGroups(ctx, item.optionGroupIds);
     if (item.isDrinkOfNight) await clearOtherDrinkOfNight(ctx);
     const now = Date.now();
@@ -166,6 +169,8 @@ export const update = mutation({
     const existing = await ctx.db.get(id);
     if (!existing) throw new Error("Menu item not found.");
     validateSizes(item.sizes);
+    if (item.category.trim().toLowerCase() === "lunch boxes" && item.sizes?.length)
+      throw new Error("Lunch boxes have one standard portion. Remove size prices.");
     await validateOptionGroups(ctx, item.optionGroupIds);
     if (item.isDrinkOfNight) await clearOtherDrinkOfNight(ctx, id);
     const replacing = Boolean(
