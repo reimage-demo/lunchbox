@@ -3,24 +3,35 @@ const board = document.querySelector('#orderBoard')
 const convexClient = window.LUNCHBOX_CONFIG?.convexUrl && window.LunchBoxConvex ? new window.LunchBoxConvex.ConvexClient(window.LUNCHBOX_CONFIG.convexUrl) : null
 let unsubscribe
 
-const statusCopy = {
-  received: { label: 'Payment confirmed', note: 'Your order is in the kitchen queue.', step: 1 },
-  'in-progress': { label: 'Being prepared', note: 'The team is making it now.', step: 2 },
-  ready: { label: 'Ready for pickup', note: 'Head to the pickup counter with your order number.', step: 3 }
+const boardStatus = document.querySelector('#boardStatus')
+
+function renderGroup(group, orders, emptyMessage) {
+  document.querySelector(`#${group}Count`).textContent = orders ? orders.length : '—'
+  document.querySelector(`#${group}Orders`).innerHTML = orders?.length
+    ? orders.map(order => `<tr><td>${escapeHtml(order.displayName)}</td><td>${escapeHtml(order.orderNumber)}</td></tr>`).join('')
+    : `<tr><td class="pickup-empty" colspan="2">${escapeHtml(emptyMessage)}</td></tr>`
 }
 
 function render(orders) {
-  if (!orders.length) { board.innerHTML = '<div class="status-empty"><span>✓</span><h3>The board is clear.</h3><p>New paid orders will appear here automatically.</p><a href="menu.html">Browse the menu</a></div>'; return }
-  board.innerHTML = orders.map(order => { const state = statusCopy[order.status] || statusCopy.received; return `
-    <article class="status-order-card status-step-${state.step}">
-      <div class="status-order-head"><span>${escapeHtml(order.orderNumber)}</span><strong>${escapeHtml(state.label)}</strong></div>
-      <div class="status-order-person"><small>Order for</small><h3>${escapeHtml(order.displayName)}</h3><p>${escapeHtml(order.itemSummary)}</p></div>
-      <div class="status-order-track"><i></i><i></i><i></i></div><p class="status-order-note">${escapeHtml(state.note)}</p>
-    </article>` }).join('')
+  const preparing = orders.filter(order => order.status === 'received' || order.status === 'in-progress')
+  const ready = orders.filter(order => order.status === 'ready')
+  renderGroup('preparing', preparing, 'No orders being prepared right now.')
+  renderGroup('ready', ready, 'No orders ready for pickup right now.')
+  board.setAttribute('aria-busy', 'false')
+  boardStatus.classList.add('is-live')
+  boardStatus.textContent = `Live pickup updates · ${preparing.length} preparing · ${ready.length} ready for pickup`
 }
 
-if (convexClient) unsubscribe = convexClient.onUpdate('orders:activeBoard', {}, render, () => { board.innerHTML = '<div class="status-empty"><h3>Updates are reconnecting.</h3><p>Please check again in a moment.</p></div>' })
-else board.innerHTML = '<div class="status-empty"><h3>Live updates are unavailable.</h3><p>Please ask a team member about your order.</p></div>'
+function renderUnavailable(message) {
+  board.setAttribute('aria-busy', 'false')
+  boardStatus.classList.remove('is-live')
+  boardStatus.textContent = message
+  renderGroup('preparing', null, 'Please ask a team member about your order.')
+  renderGroup('ready', null, 'Please ask a team member about your order.')
+}
+
+if (convexClient) unsubscribe = convexClient.onUpdate('orders:activeBoard', {}, render, () => renderUnavailable('Updates are reconnecting. Please check again in a moment.'))
+else renderUnavailable('Live updates are unavailable.')
 
 if (new URLSearchParams(location.search).get('payment') === 'success') {
   const toast = document.querySelector('#statusToast'); toast.textContent = 'Payment submitted. Your order will appear as soon as Square confirms it.'; toast.classList.add('show'); setTimeout(() => toast.classList.remove('show'), 7000)

@@ -16,7 +16,7 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Sora:wght@500;600;700;800&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="styles.css?v=20260906-3" />
+    <link rel="stylesheet" href="styles.css?v=20260929-1" />
   </head>
   <body data-page="status">
     <header class="site-header">
@@ -48,19 +48,40 @@
       <section class="status-page">
         <div class="status-page-heading">
           <div>
-            <p class="eyebrow dark">Pickup board</p>
-            <h2>What’s happening now</h2>
+            <h1>The pickup board</h1>
+            <p>Find your first name and order number. Come to the pickup counter when your order is ready.</p>
           </div>
           <a href="menu.html">Place another order</a>
         </div>
-        <div class="status-board-modern" id="orderBoard">
-          <div class="loading-card">Connecting to the kitchen…</div>
+        <p class="pickup-live" id="boardStatus" role="status">Connecting to live pickup updates…</p>
+        <div class="pickup-board" id="orderBoard" aria-busy="true">
+          <section class="pickup-group pickup-preparing" aria-labelledby="preparingHeading">
+            <div class="pickup-group-heading">
+              <h2 id="preparingHeading">Being prepared</h2>
+              <span id="preparingCount" aria-label="Preparing order count">—</span>
+            </div>
+            <table class="pickup-table" aria-labelledby="preparingHeading">
+              <thead><tr><th scope="col">First name</th><th scope="col">Order number</th></tr></thead>
+              <tbody id="preparingOrders"><tr><td class="pickup-empty" colspan="2">Loading orders…</td></tr></tbody>
+            </table>
+          </section>
+          <section class="pickup-group pickup-ready" aria-labelledby="readyHeading">
+            <div class="pickup-group-heading">
+              <h2 id="readyHeading">Ready for pickup</h2>
+              <span id="readyCount" aria-label="Ready order count">—</span>
+            </div>
+            <table class="pickup-table" aria-labelledby="readyHeading">
+              <thead><tr><th scope="col">First name</th><th scope="col">Order number</th></tr></thead>
+              <tbody id="readyOrders"><tr><td class="pickup-empty" colspan="2">Loading orders…</td></tr></tbody>
+            </table>
+          </section>
         </div>
+        <noscript><p>Please enable JavaScript for live pickup updates, or ask a team member about your order.</p></noscript>
         <p class="status-privacy">
-          First names, order numbers, and item summaries are shown for active
-          orders. Keep your order number handy when you arrive for pickup.
+          Collected orders leave this board. Need a hand? Ask a member of our team.<br />
+          Keep your order number handy when you arrive for pickup.
         </p>
-        <p class="status-privacy">DoorDash and Uber Eats delivery orders are tracked in the delivery partner’s app or website.</p>
+        <p class="status-privacy status-delivery-note">DoorDash and Uber Eats delivery orders are tracked in the delivery partner’s app or website.</p>
       </section>
     </main>
     <footer class="site-footer">
@@ -98,6 +119,6 @@
     <script src="vendor/convex-client.js?v=20260715-2" defer></script>
     <script src="shared.js?v=20260818-2" defer></script>
     <script src="ordering.js?v=20260906-6" defer></script>
-    <script src="order-status.js?v=20260718-1" defer></script>
+    <script src="order-status.js?v=20260929-1" defer></script>
   </body>
 </html>
