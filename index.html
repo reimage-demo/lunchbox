@@ -23,7 +23,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Sora:wght@500;600;700;800&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=20260906-7" />
+    <link rel="stylesheet" href="styles.css?v=20261008-hero-3" />
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -61,17 +61,22 @@
     <div id="fulfillmentMount"></div>
 
     <main>
-      <section class="hero home-hero lunchbox-hero">
-        <div class="hero-shade" aria-hidden="true"></div>
-        <div class="hero-copy" data-reveal>
-          <h1>Big Flavor! <em>Packed Fresh!</em></h1>
+      <section class="hero home-hero lunchbox-hero" aria-labelledby="hero-title">
+        <div class="hero-food-spread" aria-hidden="true">
+          <img class="hero-food hero-food-chicken" src="assets/images/lunch-box/hero/jerk-chicken.webp" width="720" height="720" fetchpriority="high" alt="" />
+          <img class="hero-food hero-food-curry" src="assets/images/lunch-box/hero/curry-chicken.webp" width="720" height="720" decoding="async" alt="" />
+          <img class="hero-food hero-food-festival" src="assets/images/lunch-box/hero/festival.webp" width="560" height="560" decoding="async" alt="" />
+          <img class="hero-food hero-food-fish" src="assets/images/lunch-box/hero/escovitch-fish.webp" width="720" height="720" decoding="async" alt="" />
+        </div>
+        <div class="hero-copy">
+          <h1 id="hero-title">Big Flavor! <em>Packed Fresh!</em></h1>
           <p>Made with care. Packed for the road. Ready when you are.</p>
+          <div class="button-row">
+            <a class="button button-primary" href="menu.html">Order Online</a>
+          </div>
           <div class="hero-location">
             <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg>
             <div><strong>Fridays &amp; Saturdays · 1 PM–11 PM</strong></div>
-          </div>
-          <div class="button-row">
-            <a class="button button-primary" href="menu.html">Start order</a>
           </div>
         </div>
       </section>
@@ -108,35 +113,6 @@
             <p>LUNCHBOX isn’t simply food from Jamaica.</p>
             <p>It’s a taste of Garet’s home.</p>
           </div>
-        </div>
-      </section>
-
-      <section class="food-gallery-section" id="food" aria-labelledby="food-gallery-title">
-        <div class="food-gallery-heading" data-reveal>
-          <p class="eyebrow dark">Lunch Box favorites</p>
-          <h2 id="food-gallery-title">Everything you want.<br /><em>In one box.</em></h2>
-        </div>
-        <div class="food-gallery">
-          <figure>
-            <img src="assets/images/lunch-box/branded-jerk-chicken-box.webp" width="1000" height="800" loading="lazy" decoding="async" alt="Lunch Box character presenting a jerk chicken lunch box" />
-            <figcaption>Jerk Chicken Lunch Box</figcaption>
-          </figure>
-          <figure>
-            <img src="assets/images/lunch-box/branded-curry-chicken-box.webp" width="1000" height="800" loading="lazy" decoding="async" alt="Lunch Box character presenting a curry chicken lunch box" />
-            <figcaption>Curry Chicken Lunch Box</figcaption>
-          </figure>
-          <figure>
-            <img src="assets/images/lunch-box/branded-escovitch-fish.webp" width="1000" height="800" loading="lazy" decoding="async" alt="Lunch Box character presenting an escovitch fish lunch box" />
-            <figcaption>Escovitch Fish Lunch Box</figcaption>
-          </figure>
-          <figure>
-            <img src="assets/images/lunch-box/branded-jerk-pork-box.webp" width="1000" height="800" loading="lazy" decoding="async" alt="Lunch Box character presenting a jerk pork lunch box" />
-            <figcaption>Jerk Pork Lunch Box</figcaption>
-          </figure>
-          <figure>
-            <img src="assets/images/lunch-box/branded-festival.webp" width="1000" height="800" loading="lazy" decoding="async" alt="Lunch Box character presenting Jamaican festival" />
-            <figcaption>Festival</figcaption>
-          </figure>
         </div>
       </section>
 
